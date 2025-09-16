@@ -13,21 +13,11 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 <body class="light-mode">
-    <header>
-        <div class="container">
-            <div class="header-content">
-                <h1><i class="fas fa-palette"></i> Duotone Photo Editor</h1>
-                <div class="header-controls">
-                    <button id="themeToggle" class="btn-icon" aria-label="Toggle dark mode">
-                        <i class="fas fa-moon"></i>
-                    </button>
-                </div>
-            </div>
-        </div>
-    </header>
-
     <main class="container">
         <section class="upload-section" id="uploadSection">
+            <div class="logo">
+                <h1><i class="fas fa-palette"></i> Duotone Photo Editor</h1>
+            </div>
             <div class="upload-card">
                 <div class="upload-area" id="uploadArea">
                     <input type="file" id="fileInput" accept=".jpg,.jpeg,.png,.webp" hidden>
@@ -47,8 +37,8 @@
                 <div class="file-info">
                     <h3 id="fileName">No file selected</h3>
                     <div class="file-details">
-                        <span id="fileSize">-</span>
                         <span id="fileDimensions">-</span>
+                        <span id="fileSize">-</span>
                     </div>
                 </div>
                 <button id="resetBtn" class="btn-secondary">
@@ -61,19 +51,29 @@
                     <div class="preview-header">
                         <h3>Preview</h3>
                         <div class="preview-controls">
-                            <button id="filterToggle" class="btn-toggle">
-                                <span>Filter: ON</span>
-                                <div class="toggle-switch"></div>
+                            <button id="undoBtn" class="btn-secondary" disabled>
+                                <i class="fas fa-undo"></i> Undo
                             </button>
-                            <button id="reverseToggle" class="btn-toggle">
-                                <span>Reverse: OFF</span>
-                                <div class="toggle-switch"></div>
+                            <button id="redoBtn" class="btn-secondary" disabled>
+                                <i class="fas fa-redo"></i> Redo
                             </button>
                         </div>
                     </div>
-                    <div class="image-preview">
-                        <canvas id="previewCanvas"></canvas>
+                    
+                    <div class="swipe-container">
+                        <div class="image-preview" id="imagePreview">
+                            <canvas id="previewCanvas"></canvas>
+                            <div class="effect-indicator">
+                                <span class="effect-name" id="effectName">Brave Pink</span>
+                                <div class="effect-dots">
+                                    <span class="dot active" data-effect="bravePink"></span>
+                                    <span class="dot" data-effect="heroGreen"></span>
+                                    <span class="dot" data-effect="combined"></span>
+                                </div>
+                            </div>
+                        </div>
                     </div>
+                    
                     <div class="intensity-control">
                         <label for="intensitySlider">Effect Intensity: <output id="intensityValue">50%</output></label>
                         <div class="slider-container">
@@ -81,62 +81,58 @@
                             <input type="number" id="intensityInput" min="0" max="100" value="50">
                         </div>
                     </div>
-                </div>
-                
-                <div class="effects-container">
-                    <h3>Select Effect</h3>
-                    <div class="effects-grid">
-                        <div class="effect-card" data-effect="bravePink">
-                            <div class="effect-preview brave-pink-preview"></div>
-                            <div class="effect-name">Brave Pink</div>
-                        </div>
-                        <div class="effect-card" data-effect="heroGreen">
-                            <div class="effect-preview hero-green-preview"></div>
-                            <div class="effect-name">Hero Green</div>
-                        </div>
-                        <div class="effect-card" data-effect="combined">
-                            <div class="effect-preview combined-preview"></div>
-                            <div class="effect-name">Combined</div>
-                        </div>
-                    </div>
                     
-                    <div class="action-buttons">
-                        <button id="undoBtn" class="btn-secondary" disabled>
-                            <i class="fas fa-undo"></i> Undo
+                    <div class="effect-toggles">
+                        <button id="classicToggle" class="btn-toggle">
+                            <span>Classic Colors</span>
+                            <div class="toggle-switch"></div>
                         </button>
-                        <button id="redoBtn" class="btn-secondary" disabled>
-                            <i class="fas fa-redo"></i> Redo
-                        </button>
-                        <button id="downloadBtn" class="btn-primary">
-                            <i class="fas fa-download"></i> Download
-                        </button>
-                        <button id="shareBtn" class="btn-primary">
-                            <i class="fas fa-share-alt"></i> Share
+                        <button id="reverseToggle" class="btn-toggle">
+                            <span>Reverse Duotone</span>
+                            <div class="toggle-switch"></div>
                         </button>
                     </div>
                 </div>
+            </div>
+            
+            <div class="action-buttons">
+                <button id="downloadBtn" class="btn-primary">
+                    <i class="fas fa-download"></i> Download
+                </button>
+                <button id="shareBtn" class="btn-primary">
+                    <i class="fas fa-share-alt"></i> Share
+                </button>
             </div>
         </section>
     </main>
 
     <footer>
         <div class="container">
+            <div class="theme-toggle-container">
+                <span class="theme-label">Light</span>
+                <label class="theme-switch">
+                    <input type="checkbox" id="themeToggle">
+                    <span class="slider round"></span>
+                </label>
+                <span class="theme-label">Dark</span>
+            </div>
+            
             <div class="footer-content">
                 <div class="footer-info">
-                    <h3>Duotone Photo Editor</h3>
+                    <h3><a href="https://bravepink-herogreen.zone.id" target="_blank">Duotone Photo Editor</a></h3>
                     <p>Transform your photos with beautiful duotone effects. All processing happens locally in your browser for maximum privacy.</p>
                 </div>
                 <div class="footer-links">
-                    <a href="https://github.com/yourusername/duotone-photo-editor" target="_blank">
+                    <a href="https://github.com/Jaxzynnice/Duotone-Photo-Editor" target="_blank">
                         <i class="fab fa-github"></i> Source Code
                     </a>
-                    <a href="https://yourwebsite.com" target="_blank">
+                    <a href="https://jaxzynnice.zone.id" target="_blank">
                         <i class="fas fa-globe"></i> Developer Website
                     </a>
                 </div>
             </div>
             <div class="footer-bottom">
-                <p>&copy; 2023 Duotone Photo Editor. Created with <i class="fas fa-heart"></i> by Developer Name</p>
+                <p>&copy; 2025 Duotone Photo Editor. Created with <i class="fas fa-heart"></i> by <a href="https://wa.me/6283872050439" target="_blank">Jaxzynnice</a></p>
             </div>
         </div>
     </footer>
