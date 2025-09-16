@@ -7,9 +7,11 @@ class DuotoneEditor {
         this.history = [];
         this.historyIndex = -1;
         this.selectedEffect = 'bravePink';
-        this.filterEnabled = true;
+        this.classicEnabled = false;
         this.reverseEnabled = false;
         this.maxFileSize = 5 * 1024 * 1024; // 5MB
+        this.swipeStartX = 0;
+        this.swipeThreshold = 50;
 
         this.initializeEventListeners();
         this.setInitialEffect();
@@ -42,10 +44,10 @@ class DuotoneEditor {
             }
         });
         
-        // Effect selection
-        document.querySelectorAll('.effect-card').forEach(card => {
-            card.addEventListener('click', () => {
-                this.selectEffect(card.dataset.effect);
+        // Effect dots selection
+        document.querySelectorAll('.dot').forEach(dot => {
+            dot.addEventListener('click', () => {
+                this.selectEffect(dot.dataset.effect);
             });
         });
         
@@ -66,8 +68,8 @@ class DuotoneEditor {
         });
         
         // Toggle buttons
-        document.getElementById('filterToggle').addEventListener('click', () => {
-            this.toggleFilter();
+        document.getElementById('classicToggle').addEventListener('click', () => {
+            this.toggleClassic();
         });
         
         document.getElementById('reverseToggle').addEventListener('click', () => {
@@ -75,7 +77,7 @@ class DuotoneEditor {
         });
         
         // Theme toggle
-        document.getElementById('themeToggle').addEventListener('click', () => {
+        document.getElementById('themeToggle').addEventListener('change', () => {
             this.toggleTheme();
         });
         
@@ -84,7 +86,19 @@ class DuotoneEditor {
         document.getElementById('redoBtn').addEventListener('click', () => this.redo());
         document.getElementById('downloadBtn').addEventListener('click', () => this.downloadImage());
         document.getElementById('shareBtn').addEventListener('click', () => this.shareImage());
-        document.getElementById('resetBtn').addEventListener('click', () => this.resetEditor());
+        document.getElementById('resetBtn').addEventListener('click', () => this.resetUpload());
+        
+        // Swipe events
+        const imagePreview = document.getElementById('imagePreview');
+        imagePreview.addEventListener('touchstart', (e) => this.handleTouchStart(e));
+        imagePreview.addEventListener('touchmove', (e) => this.handleTouchMove(e));
+        imagePreview.addEventListener('touchend', (e) => this.handleTouchEnd(e));
+        
+        // Mouse events for desktop
+        imagePreview.addEventListener('mousedown', (e) => this.handleMouseDown(e));
+        imagePreview.addEventListener('mousemove', (e) => this.handleMouseMove(e));
+        imagePreview.addEventListener('mouseup', (e) => this.handleMouseUp(e));
+        imagePreview.addEventListener('mouseleave', (e) => this.handleMouseUp(e));
     }
     
     setInitialEffect() {
@@ -96,24 +110,37 @@ class DuotoneEditor {
         this.selectedEffect = effect;
         
         // Update UI
-        document.querySelectorAll('.effect-card').forEach(card => {
-            card.classList.remove('selected');
+        document.querySelectorAll('.dot').forEach(dot => {
+            dot.classList.remove('active');
         });
         
-        document.querySelector(`.effect-card[data-effect="${effect}"]`).classList.add('selected');
+        document.querySelector(`.dot[data-effect="${effect}"]`).classList.add('active');
+        
+        // Update effect name
+        let effectName = '';
+        switch(effect) {
+            case 'bravePink':
+                effectName = 'Brave Pink';
+                break;
+            case 'heroGreen':
+                effectName = 'Hero Green';
+                break;
+            case 'combined':
+                effectName = 'Combined Effect';
+                break;
+        }
+        document.getElementById('effectName').textContent = effectName;
         
         this.applyEffect();
     }
     
-    toggleFilter() {
-        this.filterEnabled = !this.filterEnabled;
-        const button = document.getElementById('filterToggle');
+    toggleClassic() {
+        this.classicEnabled = !this.classicEnabled;
+        const button = document.getElementById('classicToggle');
         
-        if (this.filterEnabled) {
-            button.querySelector('span').textContent = 'Filter: ON';
+        if (this.classicEnabled) {
             button.classList.add('active');
         } else {
-            button.querySelector('span').textContent = 'Filter: OFF';
             button.classList.remove('active');
         }
         
@@ -125,10 +152,8 @@ class DuotoneEditor {
         const button = document.getElementById('reverseToggle');
         
         if (this.reverseEnabled) {
-            button.querySelector('span').textContent = 'Reverse: ON';
             button.classList.add('active');
         } else {
-            button.querySelector('span').textContent = 'Reverse: OFF';
             button.classList.remove('active');
         }
         
@@ -138,19 +163,112 @@ class DuotoneEditor {
     toggleTheme() {
         const body = document.body;
         const themeToggle = document.getElementById('themeToggle');
-        const icon = themeToggle.querySelector('i');
         
-        if (body.classList.contains('light-mode')) {
+        if (themeToggle.checked) {
             body.classList.remove('light-mode');
             body.classList.add('dark-mode');
-            icon.classList.remove('fa-moon');
-            icon.classList.add('fa-sun');
         } else {
             body.classList.remove('dark-mode');
             body.classList.add('light-mode');
-            icon.classList.remove('fa-sun');
-            icon.classList.add('fa-moon');
         }
+    }
+    
+    handleTouchStart(e) {
+        this.swipeStartX = e.touches[0].clientX;
+    }
+    
+    handleTouchMove(e) {
+        if (!this.swipeStartX) return;
+        
+        const currentX = e.touches[0].clientX;
+        const diffX = this.swipeStartX - currentX;
+        
+        // Prevent vertical scrolling when swiping horizontally
+        if (Math.abs(diffX) > 10) {
+            e.preventDefault();
+        }
+    }
+    
+    handleTouchEnd(e) {
+        if (!this.swipeStartX) return;
+        
+        const endX = e.changedTouches[0].clientX;
+        const diffX = this.swipeStartX - endX;
+        
+        // Check if swipe meets the threshold
+        if (Math.abs(diffX) > this.swipeThreshold) {
+            if (diffX > 0) {
+                this.swipeToNextEffect();
+            } else {
+                this.swipeToPrevEffect();
+            }
+        }
+        
+        this.swipeStartX = 0;
+    }
+    
+    handleMouseDown(e) {
+        this.swipeStartX = e.clientX;
+    }
+    
+    handleMouseMove(e) {
+        if (!this.swipeStartX) return;
+        
+        const currentX = e.clientX;
+        const diffX = this.swipeStartX - currentX;
+        
+        // Prevent text selection when dragging
+        if (Math.abs(diffX) > 10) {
+            e.preventDefault();
+        }
+    }
+    
+    handleMouseUp(e) {
+        if (!this.swipeStartX) return;
+        
+        const endX = e.clientX;
+        const diffX = this.swipeStartX - endX;
+        
+        // Check if swipe meets the threshold
+        if (Math.abs(diffX) > this.swipeThreshold) {
+            if (diffX > 0) {
+                this.swipeToNextEffect();
+            } else {
+                this.swipeToPrevEffect();
+            }
+        }
+        
+        this.swipeStartX = 0;
+    }
+    
+    swipeToNextEffect() {
+        const effects = ['bravePink', 'heroGreen', 'combined'];
+        const currentIndex = effects.indexOf(this.selectedEffect);
+        const nextIndex = (currentIndex + 1) % effects.length;
+        
+        // Add swipe animation
+        const imagePreview = document.getElementById('imagePreview');
+        imagePreview.classList.add('swipe-right');
+        
+        setTimeout(() => {
+            this.selectEffect(effects[nextIndex]);
+            imagePreview.classList.remove('swipe-right');
+        }, 300);
+    }
+    
+    swipeToPrevEffect() {
+        const effects = ['bravePink', 'heroGreen', 'combined'];
+        const currentIndex = effects.indexOf(this.selectedEffect);
+        const prevIndex = (currentIndex - 1 + effects.length) % effects.length;
+        
+        // Add swipe animation
+        const imagePreview = document.getElementById('imagePreview');
+        imagePreview.classList.add('swipe-left');
+        
+        setTimeout(() => {
+            this.selectEffect(effects[prevIndex]);
+            imagePreview.classList.remove('swipe-left');
+        }, 300);
     }
     
     handleFileUpload(file) {
@@ -200,6 +318,16 @@ class DuotoneEditor {
         return `${width/divisor}:${height/divisor}`;
     }
     
+    resetUpload() {
+        document.getElementById('uploadSection').classList.remove('hidden');
+        document.getElementById('editorSection').classList.add('hidden');
+        this.originalImage = null;
+        this.currentImage = null;
+        this.history = [];
+        this.historyIndex = -1;
+        document.getElementById('fileInput').value = '';
+    }
+    
     resetEditor() {
         this.history = [];
         this.historyIndex = -1;
@@ -222,56 +350,64 @@ class DuotoneEditor {
         // Draw original image
         this.ctx.drawImage(this.originalImage, 0, 0);
         
-        // Apply effect if filter is enabled
-        if (this.filterEnabled) {
-            // Apply duotone effect
-            const imageData = this.ctx.getImageData(0, 0, this.canvas.width, this.canvas.height);
-            const data = imageData.data;
-            
-            // Define colors based on selected effect
-            let darkColor, lightColor;
-            
-            switch (this.selectedEffect) {
-                case 'bravePink':
+        // Apply duotone effect
+        const imageData = this.ctx.getImageData(0, 0, this.canvas.width, this.canvas.height);
+        const data = imageData.data;
+        
+        // Define colors based on selected effect
+        let darkColor, lightColor;
+        
+        switch (this.selectedEffect) {
+            case 'bravePink':
+                if (this.classicEnabled) {
+                    darkColor = { r: 30, g: 0, b: 15 };     // Classic dark purple
+                    lightColor = { r: 255, g: 105, b: 180 }; // Classic pink
+                } else {
                     darkColor = { r: 60, g: 0, b: 30 };     // Dark purple
                     lightColor = { r: 255, g: 42, b: 109 }; // Brave pink
-                    break;
-                case 'heroGreen':
+                }
+                break;
+            case 'heroGreen':
+                if (this.classicEnabled) {
+                    darkColor = { r: 0, g: 20, b: 10 };     // Classic dark green
+                    lightColor = { r: 0, g: 255, b: 170 };  // Classic green
+                } else {
                     darkColor = { r: 0, g: 40, b: 20 };     // Dark green
                     lightColor = { r: 0, g: 204, b: 136 };  // Hero green
-                    break;
-                case 'combined':
-                    darkColor = { r: 60, g: 0, b: 30 };     // Dark purple
-                    lightColor = { r: 0, g: 204, b: 136 };  // Hero green
-                    break;
-            }
-            
-            // Reverse colors if needed
-            if (this.reverseEnabled) {
-                [darkColor, lightColor] = [lightColor, darkColor];
-            }
-            
-            // Apply duotone effect to each pixel
-            for (let i = 0; i < data.length; i += 4) {
-                // Calculate grayscale value (weighted average)
-                const gray = 0.3 * data[i] + 0.59 * data[i + 1] + 0.11 * data[i + 2];
-                
-                // Calculate interpolation factor based on grayscale value
-                let t = gray / 255;
-                
-                // Apply intensity
-                t = Math.pow(t, 1 + (1 - intensity) * 2);
-                
-                // Interpolate between dark and light colors
-                data[i] = Math.round(darkColor.r + (lightColor.r - darkColor.r) * t);     // R
-                data[i + 1] = Math.round(darkColor.g + (lightColor.g - darkColor.g) * t); // G
-                data[i + 2] = Math.round(darkColor.b + (lightColor.b - darkColor.b) * t); // B
-                // Alpha channel remains unchanged
-            }
-            
-            // Put modified image data back to canvas
-            this.ctx.putImageData(imageData, 0, 0);
+                }
+                break;
+            case 'combined':
+                // Green shadows and pink highlights for combined effect
+                darkColor = { r: 0, g: 60, b: 40 };        // Dark green (shadow)
+                lightColor = { r: 255, g: 105, b: 180 };   // Pink (highlight)
+                break;
         }
+        
+        // Reverse colors if needed
+        if (this.reverseEnabled) {
+            [darkColor, lightColor] = [lightColor, darkColor];
+        }
+        
+        // Apply duotone effect to each pixel
+        for (let i = 0; i < data.length; i += 4) {
+            // Calculate grayscale value (weighted average)
+            const gray = 0.3 * data[i] + 0.59 * data[i + 1] + 0.11 * data[i + 2];
+            
+            // Calculate interpolation factor based on grayscale value
+            let t = gray / 255;
+            
+            // Apply intensity
+            t = Math.pow(t, 1 + (1 - intensity) * 2);
+            
+            // Interpolate between dark and light colors
+            data[i] = Math.round(darkColor.r + (lightColor.r - darkColor.r) * t);     // R
+            data[i + 1] = Math.round(darkColor.g + (lightColor.g - darkColor.g) * t); // G
+            data[i + 2] = Math.round(darkColor.b + (lightColor.b - darkColor.b) * t); // B
+            // Alpha channel remains unchanged
+        }
+        
+        // Put modified image data back to canvas
+        this.ctx.putImageData(imageData, 0, 0);
         
         // Store current image data for history
         this.currentImage = this.canvas.toDataURL('image/png');
