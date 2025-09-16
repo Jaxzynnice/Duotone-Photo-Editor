@@ -47,7 +47,14 @@ This application works in all modern browsers that support:
 
 ```
 
-duotone-photo-editor/ ├── index.html          # Main HTML file ├── css/ │   └── style.css       # All styles for the application ├── js/ │   └── script.js       # Application logic and functionality ├── images/             # Directory for images and icons └── README.md           # This file
+duotone-photo-editor/
+├── index.html          # Main HTML file
+├── css/
+│   └── style.css       # All styles for the application
+├── js/
+│   └── script.js       # Application logic and functionality
+├── images/             # Directory for images and icons
+└── README.md           # This file
 
 ```
 
