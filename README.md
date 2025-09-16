@@ -6,8 +6,9 @@ A modern web application that allows users to upload photos and apply beautiful 
 
 - Upload images in JPG, JPEG, PNG, or WebP formats (max 5MB)
 - Three duotone effects: Brave Pink, Hero Green, and Combined
+- Swipe functionality to switch between effects
 - Adjustable effect intensity with slider and numeric input
-- Toggle filters on/off for color-blind friendly experience
+- Classic colors mode for color-blind friendly experience
 - Reverse color option for different visual effects
 - Light/dark mode toggle
 - Undo/redo functionality
@@ -20,9 +21,9 @@ A modern web application that allows users to upload photos and apply beautiful 
 
 1. Open the application in your web browser
 2. Click the upload area or drag and drop an image file
-3. Select your desired effect from the preview cards
+3. Swipe left/right on the preview image to switch between effects
 4. Adjust the intensity using the slider or input field
-5. Toggle filters or reverse colors as needed
+5. Toggle classic colors or reverse colors as needed
 6. Download your edited image or share it directly
 
 ## Technical Details
@@ -32,6 +33,7 @@ A modern web application that allows users to upload photos and apply beautiful 
 - No server-side processing - everything happens in the browser
 - Responsive design using CSS Grid and Flexbox
 - Web Share API for sharing functionality
+- Touch and mouse events for swipe functionality
 
 ## Browser Compatibility
 
@@ -69,4 +71,4 @@ This project is open source and available under the MIT License.
 
 ## Developer
 
-Created with ❤️ by Jaxzynnice
+Created with ❤️ by [Jaxzynnice](https://wa.me/6283872050439)
