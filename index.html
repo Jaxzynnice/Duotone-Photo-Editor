@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Duotone Photo Editor</title>
+    <meta name="description" content="Transform your photos with beautiful duotone effects. Edit images online with privacy guaranteed.">
+    <meta name="keywords" content="duotone photo effect, image editor, online photo editor, brave pink, hero green">
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body class="light-mode">
+    <header>
+        <div class="container">
+            <div class="header-content">
+                <h1><i class="fas fa-palette"></i> Duotone Photo Editor</h1>
+                <div class="header-controls">
+                    <button id="themeToggle" class="btn-icon" aria-label="Toggle dark mode">
+                        <i class="fas fa-moon"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main class="container">
+        <section class="upload-section" id="uploadSection">
+            <div class="upload-card">
+                <div class="upload-area" id="uploadArea">
+                    <input type="file" id="fileInput" accept=".jpg,.jpeg,.png,.webp" hidden>
+                    <div class="upload-placeholder">
+                        <i class="fas fa-cloud-upload-alt"></i>
+                        <h2>Upload Your Photo</h2>
+                        <p>Drag & drop your image here or click to browse</p>
+                        <p class="formats">Supported formats: JPG, JPEG, PNG, WebP</p>
+                        <p class="max-size">Max file size: 5MB</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="editor-section hidden" id="editorSection">
+            <div class="editor-header">
+                <div class="file-info">
+                    <h3 id="fileName">No file selected</h3>
+                    <div class="file-details">
+                        <span id="fileSize">-</span>
+                        <span id="fileDimensions">-</span>
+                    </div>
+                </div>
+                <button id="resetBtn" class="btn-secondary">
+                    <i class="fas fa-sync-alt"></i> Change Photo
+                </button>
+            </div>
+
+            <div class="editor-container">
+                <div class="preview-container">
+                    <div class="preview-header">
+                        <h3>Preview</h3>
+                        <div class="preview-controls">
+                            <button id="filterToggle" class="btn-toggle">
+                                <span>Filter: ON</span>
+                                <div class="toggle-switch"></div>
+                            </button>
+                            <button id="reverseToggle" class="btn-toggle">
+                                <span>Reverse: OFF</span>
+                                <div class="toggle-switch"></div>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="image-preview">
+                        <canvas id="previewCanvas"></canvas>
+                    </div>
+                    <div class="intensity-control">
+                        <label for="intensitySlider">Effect Intensity: <output id="intensityValue">50%</output></label>
+                        <div class="slider-container">
+                            <input type="range" id="intensitySlider" min="0" max="100" value="50">
+                            <input type="number" id="intensityInput" min="0" max="100" value="50">
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="effects-container">
+                    <h3>Select Effect</h3>
+                    <div class="effects-grid">
+                        <div class="effect-card" data-effect="bravePink">
+                            <div class="effect-preview brave-pink-preview"></div>
+                            <div class="effect-name">Brave Pink</div>
+                        </div>
+                        <div class="effect-card" data-effect="heroGreen">
+                            <div class="effect-preview hero-green-preview"></div>
+                            <div class="effect-name">Hero Green</div>
+                        </div>
+                        <div class="effect-card" data-effect="combined">
+                            <div class="effect-preview combined-preview"></div>
+                            <div class="effect-name">Combined</div>
+                        </div>
+                    </div>
+                    
+                    <div class="action-buttons">
+                        <button id="undoBtn" class="btn-secondary" disabled>
+                            <i class="fas fa-undo"></i> Undo
+                        </button>
+                        <button id="redoBtn" class="btn-secondary" disabled>
+                            <i class="fas fa-redo"></i> Redo
+                        </button>
+                        <button id="downloadBtn" class="btn-primary">
+                            <i class="fas fa-download"></i> Download
+                        </button>
+                        <button id="shareBtn" class="btn-primary">
+                            <i class="fas fa-share-alt"></i> Share
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-info">
+                    <h3>Duotone Photo Editor</h3>
+                    <p>Transform your photos with beautiful duotone effects. All processing happens locally in your browser for maximum privacy.</p>
+                </div>
+                <div class="footer-links">
+                    <a href="https://github.com/yourusername/duotone-photo-editor" target="_blank">
+                        <i class="fab fa-github"></i> Source Code
+                    </a>
+                    <a href="https://yourwebsite.com" target="_blank">
+                        <i class="fas fa-globe"></i> Developer Website
+                    </a>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2023 Duotone Photo Editor. Created with <i class="fas fa-heart"></i> by Developer Name</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="js/script.js"></script>
+</body>
+</html>
