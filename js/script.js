@@ -12,9 +12,13 @@ class DuotoneEditor {
         this.maxFileSize = 5 * 1024 * 1024; // 5MB
         this.swipeStartX = 0;
         this.swipeThreshold = 50;
+        this.currentIntensity = 50;
+        this.isProcessing = false;
+        this.language = 'en';
 
         this.initializeEventListeners();
         this.setInitialEffect();
+        this.loadPreferences();
     }
     
     initializeEventListeners() {
@@ -56,6 +60,7 @@ class DuotoneEditor {
             const value = e.target.value;
             document.getElementById('intensityInput').value = value;
             document.getElementById('intensityValue').textContent = `${value}%`;
+            this.currentIntensity = parseInt(value);
             this.applyEffect();
         });
         
@@ -64,6 +69,7 @@ class DuotoneEditor {
             e.target.value = value;
             document.getElementById('intensitySlider').value = value;
             document.getElementById('intensityValue').textContent = `${value}%`;
+            this.currentIntensity = value;
             this.applyEffect();
         });
         
@@ -79,6 +85,11 @@ class DuotoneEditor {
         // Theme toggle
         document.getElementById('themeToggle').addEventListener('change', () => {
             this.toggleTheme();
+        });
+        
+        // Language toggle
+        document.getElementById('languageToggle').addEventListener('change', () => {
+            this.toggleLanguage();
         });
         
         // Action buttons
@@ -99,6 +110,82 @@ class DuotoneEditor {
         imagePreview.addEventListener('mousemove', (e) => this.handleMouseMove(e));
         imagePreview.addEventListener('mouseup', (e) => this.handleMouseUp(e));
         imagePreview.addEventListener('mouseleave', (e) => this.handleMouseUp(e));
+        
+        // Section navigation
+        document.querySelectorAll('.section-nav-btn, .back-btn, .section-link').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                e.preventDefault();
+                const section = btn.dataset.section;
+                this.showSection(section);
+            });
+        });
+        
+        // Tab navigation
+        document.querySelectorAll('.tab-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                const tab = btn.dataset.tab;
+                this.showTab(tab);
+            });
+        });
+        
+        // Copy buttons
+        document.querySelectorAll('.copy-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                const color = btn.dataset.color;
+                const code = btn.dataset.code;
+                
+                if (color) {
+                    this.copyToClipboard(color);
+                    btn.classList.add('copied');
+                    btn.innerHTML = '<i class="fas fa-check"></i> Copied!';
+                    setTimeout(() => {
+                        btn.classList.remove('copied');
+                        btn.innerHTML = '<i class="fas fa-copy"></i> Copy';
+                    }, 2000);
+                } else if (code) {
+                    this.copyToClipboard(code);
+                    btn.classList.add('copied');
+                    btn.innerHTML = '<i class="fas fa-check"></i> Copied!';
+                    setTimeout(() => {
+                        btn.classList.remove('copied');
+                        btn.innerHTML = '<i class="fas fa-copy"></i> Copy CSS';
+                    }, 2000);
+                }
+            });
+        });
+        
+        // FAQ accordion
+        document.querySelectorAll('.faq-question').forEach(question => {
+            question.addEventListener('click', () => {
+                const answer = question.nextElementSibling;
+                question.classList.toggle('active');
+                answer.classList.toggle('active');
+            });
+        });
+        
+        // Feedback form
+        document.getElementById('feedbackForm').addEventListener('submit', (e) => {
+            e.preventDefault();
+            this.handleFeedbackSubmit();
+        });
+    }
+    
+    loadPreferences() {
+        // Load theme preference
+        const savedTheme = localStorage.getItem('theme');
+        if (savedTheme === 'dark') {
+            document.body.classList.remove('light-mode');
+            document.body.classList.add('dark-mode');
+            document.getElementById('themeToggle').checked = true;
+        }
+        
+        // Load language preference
+        const savedLanguage = localStorage.getItem('language');
+        if (savedLanguage === 'id') {
+            this.language = 'id';
+            document.getElementById('languageToggle').checked = true;
+            this.updateLanguage();
+        }
     }
     
     setInitialEffect() {
@@ -120,13 +207,13 @@ class DuotoneEditor {
         let effectName = '';
         switch(effect) {
             case 'bravePink':
-                effectName = 'Brave Pink';
+                effectName = this.language === 'id' ? 'Brave Pink' : 'Brave Pink';
                 break;
             case 'heroGreen':
-                effectName = 'Hero Green';
+                effectName = this.language === 'id' ? 'Hero Green' : 'Hero Green';
                 break;
             case 'combined':
-                effectName = 'Combined Effect';
+                effectName = this.language === 'id' ? 'Efek Gabungan' : 'Combined Effect';
                 break;
         }
         document.getElementById('effectName').textContent = effectName;
@@ -167,10 +254,73 @@ class DuotoneEditor {
         if (themeToggle.checked) {
             body.classList.remove('light-mode');
             body.classList.add('dark-mode');
+            localStorage.setItem('theme', 'dark');
         } else {
             body.classList.remove('dark-mode');
             body.classList.add('light-mode');
+            localStorage.setItem('theme', 'light');
         }
+    }
+    
+    toggleLanguage() {
+        const languageToggle = document.getElementById('languageToggle');
+        
+        if (languageToggle.checked) {
+            this.language = 'id';
+            localStorage.setItem('language', 'id');
+        } else {
+            this.language = 'en';
+            localStorage.setItem('language', 'en');
+        }
+        
+        this.updateLanguage();
+    }
+    
+    updateLanguage() {
+        // Update UI texts based on language
+        // This is a simplified implementation - you would need to update all texts
+        const elements = document.querySelectorAll('[data-en], [data-id]');
+        
+        elements.forEach(element => {
+            const text = this.language === 'en' ? element.dataset.en : element.dataset.id;
+            if (text) {
+                element.textContent = text;
+            }
+        });
+        
+        // Update effect names
+        this.selectEffect(this.selectedEffect);
+    }
+    
+    showSection(section) {
+        // Hide all sections
+        document.querySelectorAll('section').forEach(sec => {
+            sec.classList.remove('active-section');
+        });
+        
+        // Show selected section
+        document.getElementById(`${section}Section`).classList.add('active-section');
+        
+        // Special handling for upload section
+        if (section === 'upload') {
+            document.getElementById('uploadSection').classList.add('active-section');
+        }
+    }
+    
+    showTab(tab) {
+        // Deactivate all tabs
+        document.querySelectorAll('.tab-btn').forEach(btn => {
+            btn.classList.remove('active');
+        });
+        
+        // Hide all tab content
+        document.querySelectorAll('.tab-content').forEach(content => {
+            content.classList.remove('active');
+        });
+        
+        // Activate selected tab
+        document.querySelector(`.tab-btn[data-tab="${tab}"]`).classList.add('active');
+        document.getElementById(`${tab}Tab`).classList.add('active');
     }
     
     handleTouchStart(e) {
@@ -274,15 +424,20 @@ class DuotoneEditor {
     handleFileUpload(file) {
         // Check if file is an image
         if (!file.type.match('image.*')) {
-            alert('Please upload an image file (JPEG, PNG, or WebP)');
+            alert(this.language === 'id' ? 'Silakan unggah file gambar (JPEG, PNG, atau WebP)' : 'Please upload an image file (JPEG, PNG, or WebP)');
             return;
         }
         
         // Check file size
         if (file.size > this.maxFileSize) {
-            alert(`File size exceeds the maximum limit of 5MB. Your file: ${this.formatFileSize(file.size)}`);
+            alert(this.language === 'id' ? 
+                `Ukuran file melebihi batas maksimum 5MB. File Anda: ${this.formatFileSize(file.size)}` : 
+                `File size exceeds the maximum limit of 5MB. Your file: ${this.formatFileSize(file.size)}`);
             return;
         }
+        
+        // Show loading spinner
+        document.getElementById('loadingSpinner').classList.remove('hidden');
         
         const reader = new FileReader();
         reader.onload = (e) => {
@@ -291,8 +446,12 @@ class DuotoneEditor {
                 this.originalImage = img;
                 this.updateFileInfo(file, img);
                 this.resetEditor();
-                document.getElementById('uploadSection').classList.add('hidden');
-                document.getElementById('editorSection').classList.remove('hidden');
+                document.getElementById('loadingSpinner').classList.add('hidden');
+                this.showSection('editor');
+            };
+            img.onerror = () => {
+                document.getElementById('loadingSpinner').classList.add('hidden');
+                alert(this.language === 'id' ? 'Gagal memuat gambar' : 'Failed to load image');
             };
             img.src = e.target.result;
         };
@@ -315,12 +474,11 @@ class DuotoneEditor {
         // Calculate greatest common divisor
         const gcd = (a, b) => b === 0 ? a : gcd(b, a % b);
         const divisor = gcd(width, height);
-        return `${width/divisor}:${height/divisor}`;
+        return `${width/divutor}:${height/divisor}`;
     }
     
     resetUpload() {
-        document.getElementById('uploadSection').classList.remove('hidden');
-        document.getElementById('editorSection').classList.add('hidden');
+        this.showSection('upload');
         this.originalImage = null;
         this.currentImage = null;
         this.history = [];
@@ -336,81 +494,97 @@ class DuotoneEditor {
     }
     
     applyEffect() {
-        if (!this.originalImage) return;
+        if (!this.originalImage || this.isProcessing) return;
         
-        // Save current state to history before applying new effect
-        this.saveToHistory();
+        this.isProcessing = true;
         
-        const intensity = document.getElementById('intensitySlider').value / 100;
+        // Show loading spinner
+        document.getElementById('loadingSpinner').classList.remove('hidden');
         
-        // Set canvas dimensions
-        this.canvas.width = this.originalImage.width;
-        this.canvas.height = this.originalImage.height;
-        
-        // Draw original image
-        this.ctx.drawImage(this.originalImage, 0, 0);
-        
-        // Apply duotone effect
-        const imageData = this.ctx.getImageData(0, 0, this.canvas.width, this.canvas.height);
-        const data = imageData.data;
-        
-        // Define colors based on selected effect
-        let darkColor, lightColor;
-        
-        switch (this.selectedEffect) {
-            case 'bravePink':
-                if (this.classicEnabled) {
-                    darkColor = { r: 30, g: 0, b: 15 };     // Classic dark purple
-                    lightColor = { r: 255, g: 105, b: 180 }; // Classic pink
-                } else {
-                    darkColor = { r: 60, g: 0, b: 30 };     // Dark purple
-                    lightColor = { r: 255, g: 42, b: 109 }; // Brave pink
+        // Use requestAnimationFrame for smoother performance
+        requestAnimationFrame(() => {
+            try {
+                // Save current state to history before applying new effect
+                this.saveToHistory();
+                
+                const intensity = this.currentIntensity / 100;
+                
+                // Set canvas dimensions
+                this.canvas.width = this.originalImage.width;
+                this.canvas.height = this.originalImage.height;
+                
+                // Draw original image
+                this.ctx.drawImage(this.originalImage, 0, 0);
+                
+                // Apply duotone effect
+                const imageData = this.ctx.getImageData(0, 0, this.canvas.width, this.canvas.height);
+                const data = imageData.data;
+                
+                // Define colors based on selected effect
+                let darkColor, lightColor;
+                
+                switch (this.selectedEffect) {
+                    case 'bravePink':
+                        if (this.classicEnabled) {
+                            darkColor = { r: 30, g: 0, b: 15 };     // Classic dark purple
+                            lightColor = { r: 255, g: 105, b: 180 }; // Classic pink
+                        } else {
+                            darkColor = { r: 60, g: 0, b: 30 };     // Dark purple
+                            lightColor = { r: 255, g: 42, b: 109 }; // Brave pink
+                        }
+                        break;
+                    case 'heroGreen':
+                        if (this.classicEnabled) {
+                            darkColor = { r: 0, g: 20, b: 10 };     // Classic dark green
+                            lightColor = { r: 0, g: 255, b: 170 };  // Classic green
+                        } else {
+                            darkColor = { r: 0, g: 40, b: 20 };     // Dark green
+                            lightColor = { r: 0, g: 204, b: 136 };  // Hero green
+                        }
+                        break;
+                    case 'combined':
+                        // Green shadows and pink highlights for combined effect
+                        darkColor = { r: 0, g: 60, b: 40 };        // Dark green (shadow)
+                        lightColor = { r: 255, g: 105, b: 180 };   // Pink (highlight)
+                        break;
                 }
-                break;
-            case 'heroGreen':
-                if (this.classicEnabled) {
-                    darkColor = { r: 0, g: 20, b: 10 };     // Classic dark green
-                    lightColor = { r: 0, g: 255, b: 170 };  // Classic green
-                } else {
-                    darkColor = { r: 0, g: 40, b: 20 };     // Dark green
-                    lightColor = { r: 0, g: 204, b: 136 };  // Hero green
+                
+                // Reverse colors if needed
+                if (this.reverseEnabled) {
+                    [darkColor, lightColor] = [lightColor, darkColor];
                 }
-                break;
-            case 'combined':
-                // Green shadows and pink highlights for combined effect
-                darkColor = { r: 0, g: 60, b: 40 };        // Dark green (shadow)
-                lightColor = { r: 255, g: 105, b: 180 };   // Pink (highlight)
-                break;
-        }
-        
-        // Reverse colors if needed
-        if (this.reverseEnabled) {
-            [darkColor, lightColor] = [lightColor, darkColor];
-        }
-        
-        // Apply duotone effect to each pixel
-        for (let i = 0; i < data.length; i += 4) {
-            // Calculate grayscale value (weighted average)
-            const gray = 0.3 * data[i] + 0.59 * data[i + 1] + 0.11 * data[i + 2];
-            
-            // Calculate interpolation factor based on grayscale value
-            let t = gray / 255;
-            
-            // Apply intensity
-            t = Math.pow(t, 1 + (1 - intensity) * 2);
-            
-            // Interpolate between dark and light colors
-            data[i] = Math.round(darkColor.r + (lightColor.r - darkColor.r) * t);     // R
-            data[i + 1] = Math.round(darkColor.g + (lightColor.g - darkColor.g) * t); // G
-            data[i + 2] = Math.round(darkColor.b + (lightColor.b - darkColor.b) * t); // B
-            // Alpha channel remains unchanged
-        }
-        
-        // Put modified image data back to canvas
-        this.ctx.putImageData(imageData, 0, 0);
-        
-        // Store current image data for history
-        this.currentImage = this.canvas.toDataURL('image/png');
+                
+                // Apply duotone effect to each pixel
+                for (let i = 0; i < data.length; i += 4) {
+                    // Calculate grayscale value (weighted average)
+                    const gray = 0.3 * data[i] + 0.59 * data[i + 1] + 0.11 * data[i + 2];
+                    
+                    // Calculate interpolation factor based on grayscale value
+                    let t = gray / 255;
+                    
+                    // Apply intensity
+                    t = Math.pow(t, 1 + (1 - intensity) * 2);
+                    
+                    // Interpolate between dark and light colors
+                    data[i] = Math.round(darkColor.r + (lightColor.r - darkColor.r) * t);     // R
+                    data[i + 1] = Math.round(darkColor.g + (lightColor.g - darkColor.g) * t); // G
+                    data[i + 2] = Math.round(darkColor.b + (lightColor.b - darkColor.b) * t); // B
+                    // Alpha channel remains unchanged
+                }
+                
+                // Put modified image data back to canvas
+                this.ctx.putImageData(imageData, 0, 0);
+                
+                // Store current image data for history
+                this.currentImage = this.canvas.toDataURL('image/png');
+                
+            } catch (error) {
+                console.error('Error applying effect:', error);
+            } finally {
+                this.isProcessing = false;
+                document.getElementById('loadingSpinner').classList.add('hidden');
+            }
+        });
     }
     
     saveToHistory() {
@@ -419,8 +593,16 @@ class DuotoneEditor {
             this.history = this.history.slice(0, this.historyIndex + 1);
         }
         
-        // Save current state
-        this.history.push(this.canvas.toDataURL('image/png'));
+        // Save current state with all settings
+        const historyItem = {
+            imageData: this.canvas.toDataURL('image/png'),
+            intensity: this.currentIntensity,
+            effect: this.selectedEffect,
+            classic: this.classicEnabled,
+            reverse: this.reverseEnabled
+        };
+        
+        this.history.push(historyItem);
         this.historyIndex = this.history.length - 1;
         
         // Update button states
@@ -442,12 +624,49 @@ class DuotoneEditor {
     }
     
     restoreFromHistory() {
+        const historyItem = this.history[this.historyIndex];
+        
+        // Restore image
         const img = new Image();
         img.onload = () => {
             this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
             this.ctx.drawImage(img, 0, 0);
         };
-        img.src = this.history[this.historyIndex];
+        img.src = historyItem.imageData;
+        
+        // Restore settings
+        this.currentIntensity = historyItem.intensity;
+        this.selectedEffect = historyItem.effect;
+        this.classicEnabled = historyItem.classic;
+        this.reverseEnabled = historyItem.reverse;
+        
+        // Update UI to match restored state
+        document.getElementById('intensitySlider').value = this.currentIntensity;
+        document.getElementById('intensityInput').value = this.currentIntensity;
+        document.getElementById('intensityValue').textContent = `${this.currentIntensity}%`;
+        
+        document.querySelectorAll('.dot').forEach(dot => {
+            dot.classList.remove('active');
+        });
+        document.querySelector(`.dot[data-effect="${this.selectedEffect}"]`).classList.add('active');
+        
+        document.getElementById('classicToggle').classList.toggle('active', this.classicEnabled);
+        document.getElementById('reverseToggle').classList.toggle('active', this.reverseEnabled);
+        
+        // Update effect name
+        let effectName = '';
+        switch(this.selectedEffect) {
+            case 'bravePink':
+                effectName = this.language === 'id' ? 'Brave Pink' : 'Brave Pink';
+                break;
+            case 'heroGreen':
+                effectName = this.language === 'id' ? 'Hero Green' : 'Hero Green';
+                break;
+            case 'combined':
+                effectName = this.language === 'id' ? 'Efek Gabungan' : 'Combined Effect';
+                break;
+        }
+        document.getElementById('effectName').textContent = effectName;
         
         this.updateHistoryButtons();
     }
@@ -477,8 +696,10 @@ class DuotoneEditor {
                     const file = new File([blob], `duotone-${this.selectedEffect}.png`, { type: 'image/png' });
                     
                     navigator.share({
-                        title: 'Check out my duotone image!',
-                        text: 'I created this image using the Duotone Photo Editor',
+                        title: 'Duotone Photo Editor',
+                        text: this.language === 'id' ? 
+                            'Saya membuat gambar ini dengan Duotone Photo Editor : https://bravepink-herogreen.zone.id' :
+                            'I created this image with Duotone Photo Editor : https://bravepink-herogreen.zone.id',
                         files: [file]
                     })
                     .catch(error => {
@@ -493,17 +714,47 @@ class DuotoneEditor {
     
     fallbackShare() {
         // Fallback for browsers that don't support Web Share API
+        const shareText = this.language === 'id' ? 
+            'Saya membuat gambar ini dengan Duotone Photo Editor : https://bravepink-herogreen.zone.id' :
+            'I created this image with Duotone Photo Editor : https://bravepink-herogreen.zone.id';
+            
         if (navigator.clipboard) {
-            navigator.clipboard.writeText(window.location.href)
+            navigator.clipboard.writeText(shareText)
                 .then(() => {
-                    alert('Link copied to clipboard! Share it with your friends.');
+                    alert(this.language === 'id' ? 
+                        'Tautan disalin ke clipboard! Bagikan dengan teman-teman Anda.' : 
+                        'Link copied to clipboard! Share it with your friends.');
                 })
                 .catch(err => {
-                    alert(`Share this link: ${window.location.href}`);
+                    alert(shareText);
                 });
         } else {
-            alert(`Share this link: ${window.location.href}`);
+            alert(shareText);
         }
+    }
+    
+    copyToClipboard(text) {
+        navigator.clipboard.writeText(text).catch(err => {
+            console.error('Failed to copy text: ', err);
+        });
+    }
+    
+    handleFeedbackSubmit() {
+        const form = document.getElementById('feedbackForm');
+        const success = document.getElementById('feedbackSuccess');
+        
+        // In a real application, you would send this data to a server
+        // For now, we'll just show a success message
+        
+        form.classList.add('hidden');
+        success.classList.remove('hidden');
+        
+        // Reset form after 3 seconds
+        setTimeout(() => {
+            form.reset();
+            form.classList.remove('hidden');
+            success.classList.add('hidden');
+        }, 3000);
     }
 }
 
