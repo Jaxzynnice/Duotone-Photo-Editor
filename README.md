@@ -11,20 +11,16 @@ A modern web application that allows users to upload photos and apply beautiful 
 - Classic colors mode for color-blind friendly experience
 - Reverse color option for different visual effects
 - Light/dark mode toggle
-- Undo/redo functionality
+- English/Indonesian language toggle
+- Undo/redo functionality with full state restoration
 - Download edited images
 - Share images using the Web Share API
+- Color code sections with copy functionality
+- FAQ section
+- Privacy policy and terms of service
+- Feedback form
 - Fully responsive design for all devices
 - Modern, clean UI with smooth animations
-
-## How to Use
-
-1. Open the application in your web browser
-2. Click the upload area or drag and drop an image file
-3. Swipe left/right on the preview image to switch between effects
-4. Adjust the intensity using the slider or input field
-5. Toggle classic colors or reverse colors as needed
-6. Download your edited image or share it directly
 
 ## Technical Details
 
@@ -34,6 +30,8 @@ A modern web application that allows users to upload photos and apply beautiful 
 - Responsive design using CSS Grid and Flexbox
 - Web Share API for sharing functionality
 - Touch and mouse events for swipe functionality
+- LocalStorage for user preferences
+- Optimized performance with requestAnimationFrame
 
 ## Browser Compatibility
 
@@ -54,6 +52,10 @@ duotone-photo-editor/
 ├── js/
 │   └── script.js       # Application logic and functionality
 ├── images/             # Directory for images and icons
+│   ├── favicon.ico     # Website favicon
+│   ├── logo.png        # Application logo
+│   └── jaxzynnice.png  # Developer logo
+├── sitemap.xml         # XML sitemap for SEO
 └── README.md           # This file
 
 ```
@@ -68,6 +70,17 @@ This application can be deployed to any static hosting service like:
 
 Simply upload all files to your hosting provider.
 
+### SEO Optimization
+
+The application includes:
+- Meta tags for SEO and social media sharing
+- Open Graph tags for Facebook
+- Twitter Card tags for Twitter
+- Structured data (JSON-LD) for search engines
+- XML sitemap
+- Google Tag Manager integration
+- Microsoft Clarity analytics
+
 ## Privacy
 
 All image processing happens locally in your browser. No images are uploaded to any server, ensuring complete privacy for your photos.
@@ -79,3 +92,7 @@ This project is open source and available under the MIT License.
 ## Developer
 
 Created with ❤️ by [Jaxzynnice](https://wa.me/6283872050439)
+
+- Portofolio : https://jaxzynnice.zone.id
+- Instagram : https://instagram.com/janukiwill
+- WhatsApp : https://wa.me/6283872050439
