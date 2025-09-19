@@ -3,18 +3,86 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Duotone Photo Editor</title>
-    <meta name="description" content="Transform your photos with beautiful duotone effects. Edit images online with privacy guaranteed.">
-    <meta name="keywords" content="duotone photo effect, image editor, online photo editor, brave pink, hero green">
+    <title>Duotone Photo Editor - Transform Your Photos with Beautiful Effects</title>
+    <meta name="description" content="Free online photo editor with duotone effects. Apply Brave Pink, Hero Green, or Combined effects to your images. No registration required, all processing happens in your browser.">
+    <meta name="keywords" content="duotone photo editor, online photo editor, brave pink, hero green, image effects, photo filters, free photo editor">
+    <meta name="author" content="Jaxzynnice">
+    
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://bravepink-herogreen.zone.id/">
+    <meta property="og:title" content="Duotone Photo Editor - Beautiful Effects for Your Photos">
+    <meta property="og:description" content="Transform your photos with beautiful duotone effects. All processing happens locally in your browser for maximum privacy.">
+    <meta property="og:image" content="https://bravepink-herogreen.zone.id/images/og-image.png">
+    
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image">
+    <meta property="twitter:url" content="https://bravepink-herogreen.zone.id/">
+    <meta property="twitter:title" content="Duotone Photo Editor - Beautiful Effects for Your Photos">
+    <meta property="twitter:description" content="Transform your photos with beautiful duotone effects. All processing happens locally in your browser for maximum privacy.">
+    <meta property="twitter:image" content="https://bravepink-herogreen.zone.id/images/twitter-image.png">
+    
+    <!-- Canonical URL -->
+    <link rel="canonical" href="https://bravepink-herogreen.zone.id/">
+    
+    <!-- Favicon -->
+    <link rel="icon" href="images/favicon.ico" type="image/x-icon">
+    
+    <!-- Stylesheets -->
     <link rel="stylesheet" href="css/style.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Google Tag Manager -->
+    <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+    new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+    j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+    'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+    })(window,document,'script','dataLayer','GTM-XXXXXXX');</script>
+    <!-- End Google Tag Manager -->
+    
+    <!-- Microsoft Clarity -->
+    <script type="text/javascript">
+        (function(c,l,a,r,i,t,y){
+            c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
+            t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
+            y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
+        })(window, document, "clarity", "script", "XXXXXXXX");
+    </script>
+    
+    <!-- Structured Data -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "WebApplication",
+      "name": "Duotone Photo Editor",
+      "url": "https://bravepink-herogreen.zone.id/",
+      "description": "Free online photo editor with duotone effects. Apply Brave Pink, Hero Green, or Combined effects to your images.",
+      "applicationCategory": "MultimediaApplication",
+      "operatingSystem": "Any",
+      "permissions": "browser",
+      "author": {
+        "@type": "Person",
+        "name": "Jaxzynnice"
+      },
+      "offers": {
+        "@type": "Offer",
+        "price": "0",
+        "priceCurrency": "USD"
+      }
+    }
+    </script>
 </head>
 <body class="light-mode">
+    <!-- Google Tag Manager (noscript) -->
+    <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-XXXXXXX"
+    height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+    <!-- End Google Tag Manager (noscript) -->
+    
     <main class="container">
-        <section class="upload-section" id="uploadSection">
+        <section class="upload-section active-section" id="uploadSection">
             <div class="logo">
                 <h1><i class="fas fa-palette"></i> Duotone Photo Editor</h1>
             </div>
@@ -30,9 +98,21 @@
                     </div>
                 </div>
             </div>
+            
+            <div class="section-nav">
+                <button class="section-nav-btn" data-section="colorCodes">
+                    <i class="fas fa-palette"></i> Color Codes
+                </button>
+                <button class="section-nav-btn" data-section="faq">
+                    <i class="fas fa-question-circle"></i> FAQ
+                </button>
+                <button class="section-nav-btn" data-section="privacy">
+                    <i class="fas fa-shield-alt"></i> Privacy
+                </button>
+            </div>
         </section>
 
-        <section class="editor-section hidden" id="editorSection">
+        <section class="editor-section" id="editorSection">
             <div class="editor-header">
                 <div class="file-info">
                     <h3 id="fileName">No file selected</h3>
@@ -62,6 +142,9 @@
                     
                     <div class="swipe-container">
                         <div class="image-preview" id="imagePreview">
+                            <div class="loading-spinner" id="loadingSpinner">
+                                <i class="fas fa-spinner fa-spin"></i>
+                            </div>
                             <canvas id="previewCanvas"></canvas>
                             <div class="effect-indicator">
                                 <span class="effect-name" id="effectName">Brave Pink</span>
@@ -103,18 +186,416 @@
                     <i class="fas fa-share-alt"></i> Share
                 </button>
             </div>
+            
+            <div class="section-nav">
+                <button class="section-nav-btn" data-section="upload">
+                    <i class="fas fa-arrow-left"></i> Back to Upload
+                </button>
+                <button class="section-nav-btn" data-section="colorCodes">
+                    <i class="fas fa-palette"></i> Color Codes
+                </button>
+            </div>
+        </section>
+
+        <section class="color-codes-section" id="colorCodesSection">
+            <div class="section-header">
+                <h2><i class="fas fa-palette"></i> Color Codes</h2>
+                <button class="back-btn" data-section="upload">
+                    <i class="fas fa-arrow-left"></i> Back
+                </button>
+            </div>
+            
+            <div class="tabs">
+                <button class="tab-btn active" data-tab="bravePink">Brave Pink</button>
+                <button class="tab-btn" data-tab="heroGreen">Hero Green</button>
+                <button class="tab-btn" data-tab="combined">Combined</button>
+            </div>
+            
+            <div class="tab-content active" id="bravePinkTab">
+                <h3>Brave Pink Color Palette</h3>
+                
+                <div class="color-grid">
+                    <div class="color-card">
+                        <div class="color-preview" style="background: #4c0519;"></div>
+                        <div class="color-info">
+                            <p class="color-name">Dark Purple</p>
+                            <p class="color-code">HEX: #4c0519</p>
+                            <button class="copy-btn" data-color="#4c0519">
+                                <i class="fas fa-copy"></i> Copy
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <div class="color-card">
+                        <div class="color-preview" style="background: #ec4899;"></div>
+                        <div class="color-info">
+                            <p class="color-name">Brave Pink</p>
+                            <p class="color-code">HEX: #ec4899</p>
+                            <button class="copy-btn" data-color="#ec4899">
+                                <i class="fas fa-copy"></i> Copy
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <div class="color-card">
+                        <div class="color-preview" style="background: #f784c5;"></div>
+                        <div class="color-info">
+                            <p class="color-name">Light Pink</p>
+                            <p class="color-code">HEX: #f784c5</p>
+                            <button class="copy-btn" data-color="#f784c5">
+                                <i class="fas fa-copy"></i> Copy
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="code-example">
+                    <h4>CSS Implementation</h4>
+                    <div class="code-card">
+                        <pre><code>/* Brave Pink Gradient */
+.gradient-brave-pink {
+  background: linear-gradient(135deg, #4c0519 0%, #ec4899 100%);
+}
+
+/* Brave Pink Text */
+.text-brave-pink {
+  color: #ec4899;
+}
+
+/* Brave Pink Background */
+.bg-brave-pink {
+  background-color: #ec4899;
+}</code></pre>
+                        <button class="copy-btn" data-code=".gradient-brave-pink {
+  background: linear-gradient(135deg, #4c0519 0%, #ec4899 100%);
+}
+
+.text-brave-pink {
+  color: #ec4899;
+}
+
+.bg-brave-pink {
+  background-color: #ec4899;
+}">
+                            <i class="fas fa-copy"></i> Copy CSS
+                        </button>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="tab-content" id="heroGreenTab">
+                <h3>Hero Green Color Palette</h3>
+                
+                <div class="color-grid">
+                    <div class="color-card">
+                        <div class="color-preview" style="background: #052e16;"></div>
+                        <div class="color-info">
+                            <p class="color-name">Dark Green</p>
+                            <p class="color-code">HEX: #052e16</p>
+                            <button class="copy-btn" data-color="#052e16">
+                                <i class="fas fa-copy"></i> Copy
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <div class="color-card">
+                        <div class="color-preview" style="background: #10b981;"></div>
+                        <div class="color-info">
+                            <p class="color-name">Hero Green</p>
+                            <p class="color-code">HEX: #10b981</p>
+                            <button class="copy-btn" data-color="#10b981">
+                                <i class="fas fa-copy"></i> Copy
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <div class="color-card">
+                        <div class="color-preview" style="background: #1b602f;"></div>
+                        <div class="color-info">
+                            <p class="color-name">Medium Green</p>
+                            <p class="color-code">HEX: #1b602f</p>
+                            <button class="copy-btn" data-color="#1b602f">
+                                <i class="fas fa-copy"></i> Copy
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="code-example">
+                    <h4>CSS Implementation</h4>
+                    <div class="code-card">
+                        <pre><code>/* Hero Green Gradient */
+.gradient-hero-green {
+  background: linear-gradient(135deg, #052e16 0%, #10b981 100%);
+}
+
+/* Hero Green Text */
+.text-hero-green {
+  color: #10b981;
+}
+
+/* Hero Green Background */
+.bg-hero-green {
+  background-color: #10b981;
+}</code></pre>
+                        <button class="copy-btn" data-code=".gradient-hero-green {
+  background: linear-gradient(135deg, #052e16 0%, #10b981 100%);
+}
+
+.text-hero-green {
+  color: #10b981;
+}
+
+.bg-hero-green {
+  background-color: #10b981;
+}">
+                            <i class="fas fa-copy"></i> Copy CSS
+                        </button>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="tab-content" id="combinedTab">
+                <h3>Combined Effect Color Palette</h3>
+                
+                <div class="color-grid">
+                    <div class="color-card">
+                        <div class="color-preview" style="background: #4c0519;"></div>
+                        <div class="color-info">
+                            <p class="color-name">Dark Purple</p>
+                            <p class="color-code">HEX: #4c0519</p>
+                            <button class="copy-btn" data-color="#4c0519">
+                                <i class="fas fa-copy"></i> Copy
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <div class="color-card">
+                        <div class="color-preview" style="background: #052e16;"></div>
+                        <div class="color-info">
+                            <p class="color-name">Dark Green</p>
+                            <p class="color-code">HEX: #052e16</p>
+                            <button class="copy-btn" data-color="#052e16">
+                                <i class="fas fa-copy"></i> Copy
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <div class="color-card">
+                        <div class="color-preview" style="background: #ec4899;"></div>
+                        <div class="color-info">
+                            <p class="color-name">Brave Pink</p>
+                            <p class="color-code">HEX: #ec4899</p>
+                            <button class="copy-btn" data-color="#ec4899">
+                                <i class="fas fa-copy"></i> Copy
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <div class="color-card">
+                        <div class="color-preview" style="background: #10b981;"></div>
+                        <div class="color-info">
+                            <p class="color-name">Hero Green</p>
+                            <p class="color-code">HEX: #10b981</p>
+                            <button class="copy-btn" data-color="#10b981">
+                                <i class="fas fa-copy"></i> Copy
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="code-example">
+                    <h4>CSS Implementation</h4>
+                    <div class="code-card">
+                        <pre><code>/* Combined Gradient */
+.gradient-combined {
+  background: linear-gradient(135deg, #4c0519 0%, #052e16 50%, #ec4899 100%);
+}
+
+/* Combined Text Gradient */
+.text-combined {
+  background: linear-gradient(135deg, #ec4899 0%, #10b981 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}</code></pre>
+                        <button class="copy-btn" data-code=".gradient-combined {
+  background: linear-gradient(135deg, #4c0519 0%, #052e16 50%, #ec4899 100%);
+}
+
+.text-combined {
+  background: linear-gradient(135deg, #ec4899 0%, #10b981 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}">
+                            <i class="fas fa-copy"></i> Copy CSS
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="faq-section" id="faqSection">
+            <div class="section-header">
+                <h2><i class="fas fa-question-circle"></i> Frequently Asked Questions</h2>
+                <button class="back-btn" data-section="upload">
+                    <i class="fas fa-arrow-left"></i> Back
+                </button>
+            </div>
+            
+            <div class="faq-list">
+                <div class="faq-item">
+                    <button class="faq-question">
+                        What is Duotone Photo Editor?
+                        <i class="fas fa-chevron-down"></i>
+                    </button>
+                    <div class="faq-answer">
+                        <p>Duotone Photo Editor is a free online tool that allows you to apply beautiful duotone effects to your photos. You can choose between Brave Pink, Hero Green, or a Combined effect, with options to customize intensity and color settings.</p>
+                    </div>
+                </div>
+                
+                <div class="faq-item">
+                    <button class="faq-question">
+                        Is my privacy protected?
+                        <i class="fas fa-chevron-down"></i>
+                    </button>
+                    <div class="faq-answer">
+                        <p>Yes! All image processing happens locally in your browser. Your photos are never uploaded to any server, ensuring complete privacy and security.</p>
+                    </div>
+                </div>
+                
+                <div class="faq-item">
+                    <button class="faq-question">
+                        What image formats are supported?
+                        <i class="fas fa-chevron-down"></i>
+                    </button>
+                    <div class="faq-answer">
+                        <p>We support JPG, JPEG, PNG, and WebP formats. The maximum file size is 5MB.</p>
+                    </div>
+                </div>
+                
+                <div class="faq-item">
+                    <button class="faq-question">
+                        How do I save my edited photo?
+                        <i class="fas fa-chevron-down"></i>
+                    </button>
+                    <div class="faq-answer">
+                        <p>After applying your desired effects, click the "Download" button to save the image to your device. You can also use the "Share" button to share it directly to social media platforms.</p>
+                    </div>
+                </div>
+                
+                <div class="faq-item">
+                    <button class="faq-question">
+                        Can I use this on mobile devices?
+                        <i class="fas fa-chevron-down"></i>
+                    </button>
+                    <div class="faq-answer">
+                        <p>Yes! Duotone Photo Editor is fully responsive and works on all devices including smartphones and tablets. You can even swipe on the preview image to switch between effects.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="privacy-section" id="privacySection">
+            <div class="section-header">
+                <h2><i class="fas fa-shield-alt"></i> Privacy & Terms</h2>
+                <button class="back-btn" data-section="upload">
+                    <i class="fas fa-arrow-left"></i> Back
+                </button>
+            </div>
+            
+            <div class="privacy-content">
+                <h3>Privacy Policy</h3>
+                <p>Last updated: January 2025</p>
+                
+                <p>Your privacy is important to us. This privacy policy explains what personal data we collect and how we use it.</p>
+                
+                <h4>Data Collection</h4>
+                <p>Duotone Photo Editor does not collect, store, or transmit any personal data. All image processing happens locally in your browser using JavaScript. Your photos are never uploaded to any server.</p>
+                
+                <h4>Analytics</h4>
+                <p>We use Google Analytics and Microsoft Clarity to understand how visitors interact with our website. These services collect anonymous usage data such as page views, time spent on site, and device information. This data helps us improve the user experience.</p>
+                
+                <h4>Cookies</h4>
+                <p>We use cookies to store your preference for dark/light mode and language settings. These cookies are stored locally on your device and are not used for tracking purposes.</p>
+                
+                <h3>Terms of Service</h3>
+                <p>By using Duotone Photo Editor, you agree to the following terms:</p>
+                
+                <ol>
+                    <li>You will not use this service for any illegal purpose</li>
+                    <li>You have the right to use any images you upload and edit</li>
+                    <li>We are not responsible for any loss or damage resulting from the use of this service</li>
+                    <li>We reserve the right to modify these terms at any time</li>
+                </ol>
+                
+                <h3>Contact</h3>
+                <p>If you have any questions about these policies, please contact us at <a href="https://wa.me/6283872050439">WhatsApp</a> or visit our <a href="https://jaxzynnice.zone.id">developer website</a>.</p>
+            </div>
+        </section>
+
+        <section class="feedback-section" id="feedbackSection">
+            <div class="section-header">
+                <h2><i class="fas fa-comment-dots"></i> Feedback</h2>
+                <button class="back-btn" data-section="upload">
+                    <i class="fas fa-arrow-left"></i> Back
+                </button>
+            </div>
+            
+            <div class="feedback-form">
+                <p>We'd love to hear your thoughts about Duotone Photo Editor. Your feedback helps us improve the tool!</p>
+                
+                <form id="feedbackForm">
+                    <div class="form-group">
+                        <label for="feedbackName">Name (optional)</label>
+                        <input type="text" id="feedbackName" placeholder="Your name">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="feedbackEmail">Email (optional)</label>
+                        <input type="email" id="feedbackEmail" placeholder="Your email">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="feedbackMessage">Message *</label>
+                        <textarea id="feedbackMessage" placeholder="Your feedback or suggestions..." required></textarea>
+                    </div>
+                    
+                    <button type="submit" class="btn-primary">
+                        <i class="fas fa-paper-plane"></i> Send Feedback
+                    </button>
+                </form>
+                
+                <div class="feedback-success hidden" id="feedbackSuccess">
+                    <i class="fas fa-check-circle"></i>
+                    <h3>Thank you for your feedback!</h3>
+                    <p>We appreciate you taking the time to help us improve Duotone Photo Editor.</p>
+                </div>
+            </div>
         </section>
     </main>
 
     <footer>
         <div class="container">
-            <div class="theme-toggle-container">
-                <span class="theme-label">Light</span>
-                <label class="theme-switch">
-                    <input type="checkbox" id="themeToggle">
-                    <span class="slider round"></span>
-                </label>
-                <span class="theme-label">Dark</span>
+            <div class="footer-controls">
+                <div class="theme-toggle-container">
+                    <i class="fas fa-sun"></i>
+                    <label class="theme-switch">
+                        <input type="checkbox" id="themeToggle">
+                        <span class="slider round"></span>
+                    </label>
+                    <i class="fas fa-moon"></i>
+                </div>
+                
+                <div class="language-toggle-container">
+                    <span class="language-option active" data-lang="en">EN 🇺🇸</span>
+                    <label class="language-switch">
+                        <input type="checkbox" id="languageToggle">
+                        <span class="slider round"></span>
+                    </label>
+                    <span class="language-option" data-lang="id">ID 🇮🇩</span>
+                </div>
             </div>
             
             <div class="footer-content">
@@ -129,10 +610,15 @@
                     <a href="https://jaxzynnice.zone.id" target="_blank">
                         <i class="fas fa-globe"></i> Developer Website
                     </a>
+                    <a href="#" class="section-link" data-section="feedback">
+                        <i class="fas fa-comment-dots"></i> Feedback
+                    </a>
                 </div>
             </div>
             <div class="footer-bottom">
-                <p>&copy; 2025 Duotone Photo Editor. Created with <i class="fas fa-heart"></i> by <a href="https://wa.me/6283872050439" target="_blank">Jaxzynnice</a></p>
+                <p>&copy; 2025 Duotone Photo Editor. Created with <i class="fas fa-heart"></i> by <a href="https://wa.me/6283872050439" target="_blank" class="developer-link">
+                    <img src="images/jaxzynnice.png" alt="Jaxzynnice" class="developer-logo"> Jaxzynnice
+                </a></p>
             </div>
         </div>
     </footer>
