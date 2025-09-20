@@ -45,18 +45,7 @@ This application works in all modern browsers that support:
 
 ```
 
-duotone-photo-editor/
-├── index.html          # Main HTML file
-├── css/
-│   └── style.css       # All styles for the application
-├── js/
-│   └── script.js       # Application logic and functionality
-├── images/             # Directory for images and icons
-│   ├── favicon.ico     # Website favicon
-│   ├── logo.png        # Application logo
-│   └── jaxzynnice.png  # Developer logo
-├── sitemap.xml         # XML sitemap for SEO
-└── README.md           # This file
+duotone-photo-editor/ ├── index.html          # Main HTML file ├── css/ │   └── style.css       # All styles for the application ├── js/ │   └── script.js       # Application logic and functionality ├── images/             # Directory for images and icons │   ├── favicon.ico     # Website favicon │   ├── logo.png        # Application logo │   ├── jaxzynnice.png  # Developer logo │   └── deepseek.png    # DeepSeek logo ├── sitemap.xml         # XML sitemap for SEO └── README.md           # This file
 
 ```
 
@@ -91,8 +80,4 @@ This project is open source and available under the MIT License.
 
 ## Developer
 
-Created with ❤️ by [Jaxzynnice](https://wa.me/6283872050439)
-
-- Portofolio : https://jaxzynnice.zone.id
-- Instagram : https://instagram.com/janukiwill
-- WhatsApp : https://wa.me/6283872050439
+Created with ❤️ by [Jaxzynnice](https://instagram.com/janukiwill)
