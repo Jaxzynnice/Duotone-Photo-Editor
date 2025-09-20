@@ -15,6 +15,7 @@ class DuotoneEditor {
         this.currentIntensity = 50;
         this.isProcessing = false;
         this.language = 'en';
+        this.activeColorCard = null;
 
         this.initializeEventListeners();
         this.setInitialEffect();
@@ -130,17 +131,18 @@ class DuotoneEditor {
         
         // Copy buttons
         document.querySelectorAll('.copy-btn').forEach(btn => {
-            btn.addEventListener('click', () => {
+            btn.addEventListener('click', (e) => {
+                e.stopPropagation();
                 const color = btn.dataset.color;
                 const code = btn.dataset.code;
                 
                 if (color) {
                     this.copyToClipboard(color);
                     btn.classList.add('copied');
-                    btn.innerHTML = '<i class="fas fa-check"></i> Copied!';
+                    btn.innerHTML = '<i class="fas fa-check"></i>';
                     setTimeout(() => {
                         btn.classList.remove('copied');
-                        btn.innerHTML = '<i class="fas fa-copy"></i> Copy';
+                        btn.innerHTML = '<i class="fas fa-copy"></i>';
                     }, 2000);
                 } else if (code) {
                     this.copyToClipboard(code);
@@ -152,6 +154,30 @@ class DuotoneEditor {
                     }, 2000);
                 }
             });
+        });
+        
+        // Color card selection
+        document.querySelectorAll('.color-card').forEach(card => {
+            card.addEventListener('click', (e) => {
+                if (e.target.classList.contains('copy-btn')) return;
+                
+                // Remove active class from all cards
+                document.querySelectorAll('.color-card').forEach(c => {
+                    c.classList.remove('active');
+                });
+                
+                // Add active class to clicked card
+                card.classList.add('active');
+                this.activeColorCard = card;
+            });
+        });
+        
+        // Click outside to deselect color cards
+        document.addEventListener('click', (e) => {
+            if (this.activeColorCard && !e.target.closest('.color-card')) {
+                this.activeColorCard.classList.remove('active');
+                this.activeColorCard = null;
+            }
         });
         
         // FAQ accordion
@@ -207,13 +233,13 @@ class DuotoneEditor {
         let effectName = '';
         switch(effect) {
             case 'bravePink':
-                effectName = this.language === 'id' ? 'Brave Pink' : 'Brave Pink';
+                effectName = 'Brave Pink';
                 break;
             case 'heroGreen':
-                effectName = this.language === 'id' ? 'Hero Green' : 'Hero Green';
+                effectName = 'Hero Green';
                 break;
             case 'combined':
-                effectName = this.language === 'id' ? 'Efek Gabungan' : 'Combined Effect';
+                effectName = 'Combined Effect';
                 break;
         }
         document.getElementById('effectName').textContent = effectName;
@@ -278,7 +304,6 @@ class DuotoneEditor {
     
     updateLanguage() {
         // Update UI texts based on language
-        // This is a simplified implementation - you would need to update all texts
         const elements = document.querySelectorAll('[data-en], [data-id]');
         
         elements.forEach(element => {
@@ -290,6 +315,22 @@ class DuotoneEditor {
         
         // Update effect names
         this.selectEffect(this.selectedEffect);
+        
+        // Update toggle labels
+        const themeLabels = document.querySelectorAll('.theme-toggle-container .toggle-label');
+        const languageLabels = document.querySelectorAll('.language-toggle-container .toggle-label');
+        
+        if (this.language === 'id') {
+            themeLabels[0].textContent = 'Terang';
+            themeLabels[1].textContent = 'Gelap';
+            languageLabels[0].textContent = 'Inggris';
+            languageLabels[1].textContent = 'Indonesia';
+        } else {
+            themeLabels[0].textContent = 'Light';
+            themeLabels[1].textContent = 'Dark';
+            languageLabels[0].textContent = 'English';
+            languageLabels[1].textContent = 'Indonesia';
+        }
     }
     
     showSection(section) {
@@ -474,7 +515,7 @@ class DuotoneEditor {
         // Calculate greatest common divisor
         const gcd = (a, b) => b === 0 ? a : gcd(b, a % b);
         const divisor = gcd(width, height);
-        return `${width/divutor}:${height/divisor}`;
+        return `${width/divisor}:${height/divisor}`;
     }
     
     resetUpload() {
@@ -657,13 +698,13 @@ class DuotoneEditor {
         let effectName = '';
         switch(this.selectedEffect) {
             case 'bravePink':
-                effectName = this.language === 'id' ? 'Brave Pink' : 'Brave Pink';
+                effectName = 'Brave Pink';
                 break;
             case 'heroGreen':
-                effectName = this.language === 'id' ? 'Hero Green' : 'Hero Green';
+                effectName = 'Hero Green';
                 break;
             case 'combined':
-                effectName = this.language === 'id' ? 'Efek Gabungan' : 'Combined Effect';
+                effectName = 'Combined Effect';
                 break;
         }
         document.getElementById('effectName').textContent = effectName;
