@@ -114,16 +114,19 @@
 
         <section class="editor-section" id="editorSection">
             <div class="editor-header">
-                <div class="file-info">
-                    <h3 id="fileName">No file selected</h3>
-                    <div class="file-details">
-                        <span id="fileDimensions">-</span>
-                        <span id="fileSize">-</span>
-                    </div>
-                </div>
-                <button id="resetBtn" class="btn-secondary">
-                    <i class="fas fa-sync-alt"></i> Change Photo
+                <button class="back-btn" data-section="upload">
+                    <i class="fas fa-arrow-left"></i>
                 </button>
+                <h2 class="section-title">Photo Editor</h2>
+                <div class="header-spacer"></div>
+            </div>
+
+            <div class="file-info">
+                <h3 id="fileName">No file selected</h3>
+                <div class="file-details">
+                    <span id="fileDimensions">-</span>
+                    <span id="fileSize">-</span>
+                </div>
             </div>
 
             <div class="editor-container">
@@ -188,9 +191,6 @@
             </div>
             
             <div class="section-nav">
-                <button class="section-nav-btn" data-section="upload">
-                    <i class="fas fa-arrow-left"></i> Back to Upload
-                </button>
                 <button class="section-nav-btn" data-section="colorCodes">
                     <i class="fas fa-palette"></i> Color Codes
                 </button>
@@ -199,16 +199,19 @@
 
         <section class="color-codes-section" id="colorCodesSection">
             <div class="section-header">
-                <h2><i class="fas fa-palette"></i> Color Codes</h2>
                 <button class="back-btn" data-section="upload">
-                    <i class="fas fa-arrow-left"></i> Back
+                    <i class="fas fa-arrow-left"></i>
                 </button>
+                <h2 class="section-title"><i class="fas fa-palette"></i> Color Codes</h2>
+                <div class="header-spacer"></div>
             </div>
             
-            <div class="tabs">
-                <button class="tab-btn active" data-tab="bravePink">Brave Pink</button>
-                <button class="tab-btn" data-tab="heroGreen">Hero Green</button>
-                <button class="tab-btn" data-tab="combined">Combined</button>
+            <div class="tabs-container">
+                <div class="tabs">
+                    <button class="tab-btn active" data-tab="bravePink">Brave Pink</button>
+                    <button class="tab-btn" data-tab="heroGreen">Hero Green</button>
+                    <button class="tab-btn" data-tab="combined">Combined</button>
+                </div>
             </div>
             
             <div class="tab-content active" id="bravePinkTab">
@@ -219,10 +222,29 @@
                         <div class="color-preview" style="background: #4c0519;"></div>
                         <div class="color-info">
                             <p class="color-name">Dark Purple</p>
-                            <p class="color-code">HEX: #4c0519</p>
-                            <button class="copy-btn" data-color="#4c0519">
-                                <i class="fas fa-copy"></i> Copy
-                            </button>
+                            <div class="color-codes">
+                                <div class="code-item">
+                                    <span class="code-label">HEX:</span>
+                                    <span class="code-value">#4c0519</span>
+                                    <button class="copy-btn" data-color="#4c0519">
+                                        <i class="fas fa-copy"></i>
+                                    </button>
+                                </div>
+                                <div class="code-item">
+                                    <span class="code-label">RGB:</span>
+                                    <span class="code-value">rgb(76, 5, 25)</span>
+                                    <button class="copy-btn" data-color="rgb(76, 5, 25)">
+                                        <i class="fas fa-copy"></i>
+                                    </button>
+                                </div>
+                                <div class="code-item">
+                                    <span class="code-label">HSL:</span>
+                                    <span class="code-value">hsl(342, 88%, 16%)</span>
+                                    <button class="copy-btn" data-color="hsl(342, 88%, 16%)">
+                                        <i class="fas fa-copy"></i>
+                                    </button>
+                                </div>
+                            </div>
                         </div>
                     </div>
                     
@@ -230,10 +252,29 @@
                         <div class="color-preview" style="background: #ec4899;"></div>
                         <div class="color-info">
                             <p class="color-name">Brave Pink</p>
-                            <p class="color-code">HEX: #ec4899</p>
-                            <button class="copy-btn" data-color="#ec4899">
-                                <i class="fas fa-copy"></i> Copy
-                            </button>
+                            <div class="color-codes">
+                                <div class="code-item">
+                                    <span class="code-label">HEX:</span>
+                                    <span class="code-value">#ec4899</span>
+                                    <button class="copy-btn" data-color="#ec4899">
+                                        <i class="fas fa-copy"></i>
+                                    </button>
+                                </div>
+                                <div class="code-item">
+                                    <span class="code-label">RGB:</span>
+                                    <span class="code-value">rgb(236, 72, 153)</span>
+                                    <button class="copy-btn" data-color="rgb(236, 72, 153)">
+                                        <i class="fas fa-copy"></i>
+                                    </button>
+                                </div>
+                                <div class="code-item">
+                                    <span class="code-label">HSL:</span>
+                                    <span class="code-value">hsl(330, 81%, 60%)</span>
+                                    <button class="copy-btn" data-color="hsl(330, 81%, 60%)">
+                                        <i class="fas fa-copy"></i>
+                                    </button>
+                                </div>
+                            </div>
                         </div>
                     </div>
                     
@@ -241,18 +282,54 @@
                         <div class="color-preview" style="background: #f784c5;"></div>
                         <div class="color-info">
                             <p class="color-name">Light Pink</p>
-                            <p class="color-code">HEX: #f784c5</p>
-                            <button class="copy-btn" data-color="#f784c5">
-                                <i class="fas fa-copy"></i> Copy
-                            </button>
+                            <div class="color-codes">
+                                <div class="code-item">
+                                    <span class="code-label">HEX:</span>
+                                    <span class="code-value">#f784c5</span>
+                                    <button class="copy-btn" data-color="#f784c5">
+                                        <i class="fas fa-copy"></i>
+                                    </button>
+                                </div>
+                                <div class="code-item">
+                                    <span class="code-label">RGB:</span>
+                                    <span class="code-value">rgb(247, 132, 197)</span>
+                                    <button class="copy-btn" data-color="rgb(247, 132, 197)">
+                                        <i class="fas fa-copy"></i>
+                                    </button>
+                                </div>
+                                <div class="code-item">
+                                    <span class="code-label">HSL:</span>
+                                    <span class="code-value">hsl(326, 87%, 74%)</span>
+                                    <button class="copy-btn" data-color="hsl(326, 87%, 74%)">
+                                        <i class="fas fa-copy"></i>
+                                    </button>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
                 
                 <div class="code-example">
                     <h4>CSS Implementation</h4>
-                    <div class="code-card">
-                        <pre><code>/* Brave Pink Gradient */
+                    <div class="code-card carbon-style">
+                        <div class="code-header">
+                            <span class="code-filename">style.css</span>
+                            <button class="copy-btn" data-code=".gradient-brave-pink {
+  background: linear-gradient(135deg, #4c0519 0%, #ec4899 100%);
+}
+
+.text-brave-pink {
+  color: #ec4899;
+}
+
+.bg-brave-pink {
+  background-color: #ec4899;
+}">
+                                <i class="fas fa-copy"></i> Copy CSS
+                            </button>
+                        </div>
+                        <div class="code-content">
+                            <pre><code>/* Brave Pink Gradient */
 .gradient-brave-pink {
   background: linear-gradient(135deg, #4c0519 0%, #ec4899 100%);
 }
@@ -266,19 +343,7 @@
 .bg-brave-pink {
   background-color: #ec4899;
 }</code></pre>
-                        <button class="copy-btn" data-code=".gradient-brave-pink {
-  background: linear-gradient(135deg, #4c0519 0%, #ec4899 100%);
-}
-
-.text-brave-pink {
-  color: #ec4899;
-}
-
-.bg-brave-pink {
-  background-color: #ec4899;
-}">
-                            <i class="fas fa-copy"></i> Copy CSS
-                        </button>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -291,10 +356,29 @@
                         <div class="color-preview" style="background: #052e16;"></div>
                         <div class="color-info">
                             <p class="color-name">Dark Green</p>
-                            <p class="color-code">HEX: #052e16</p>
-                            <button class="copy-btn" data-color="#052e16">
-                                <i class="fas fa-copy"></i> Copy
-                            </button>
+                            <div class="color-codes">
+                                <div class="code-item">
+                                    <span class="code-label">HEX:</span>
+                                    <span class="code-value">#052e16</span>
+                                    <button class="copy-btn" data-color="#052e16">
+                                        <i class="fas fa-copy"></i>
+                                    </button>
+                                </div>
+                                <div class="code-item">
+                                    <span class="code-label">RGB:</span>
+                                    <span class="code-value">rgb(5, 46, 22)</span>
+                                    <button class="copy-btn" data-color="rgb(5, 46, 22)">
+                                        <i class="fas fa-copy"></i>
+                                    </button>
+                                </div>
+                                <div class="code-item">
+                                    <span class="code-label">HSL:</span>
+                                    <span class="code-value">hsl(144, 80%, 10%)</span>
+                                    <button class="copy-btn" data-color="hsl(144, 80%, 10%)">
+                                        <i class="fas fa-copy"></i>
+                                    </button>
+                                </div>
+                            </div>
                         </div>
                     </div>
                     
@@ -302,10 +386,29 @@
                         <div class="color-preview" style="background: #10b981;"></div>
                         <div class="color-info">
                             <p class="color-name">Hero Green</p>
-                            <p class="color-code">HEX: #10b981</p>
-                            <button class="copy-btn" data-color="#10b981">
-                                <i class="fas fa-copy"></i> Copy
-                            </button>
+                            <div class="color-codes">
+                                <div class="code-item">
+                                    <span class="code-label">HEX:</span>
+                                    <span class="code-value">#10b981</span>
+                                    <button class="copy-btn" data-color="#10b981">
+                                        <i class="fas fa-copy"></i>
+                                    </button>
+                                </div>
+                                <div class="code-item">
+                                    <span class="code-label">RGB:</span>
+                                    <span class="code-value">rgb(16, 185, 129)</span>
+                                    <button class="copy-btn" data-color="rgb(16, 185, 129)">
+                                        <i class="fas fa-copy"></i>
+                                    </button>
+                                </div>
+                                <div class="code-item">
+                                    <span class="code-label">HSL:</span>
+                                    <span class="code-value">hsl(160, 84%, 39%)</span>
+                                    <button class="copy-btn" data-color="hsl(160, 84%, 39%)">
+                                        <i class="fas fa-copy"></i>
+                                    </button>
+                                </div>
+                            </div>
                         </div>
                     </div>
                     
@@ -313,18 +416,54 @@
                         <div class="color-preview" style="background: #1b602f;"></div>
                         <div class="color-info">
                             <p class="color-name">Medium Green</p>
-                            <p class="color-code">HEX: #1b602f</p>
-                            <button class="copy-btn" data-color="#1b602f">
-                                <i class="fas fa-copy"></i> Copy
-                            </button>
+                            <div class="color-codes">
+                                <div class="code-item">
+                                    <span class="code-label">HEX:</span>
+                                    <span class="code-value">#1b602f</span>
+                                    <button class="copy-btn" data-color="#1b602f">
+                                        <i class="fas fa-copy"></i>
+                                    </button>
+                                </div>
+                                <div class="code-item">
+                                    <span class="code-label">RGB:</span>
+                                    <span class="code-value">rgb(27, 96, 47)</span>
+                                    <button class="copy-btn" data-color="rgb(27, 96, 47)">
+                                        <i class="fas fa-copy"></i>
+                                    </button>
+                                </div>
+                                <div class="code-item">
+                                    <span class="code-label">HSL:</span>
+                                    <span class="code-value">hsl(137, 56%, 24%)</span>
+                                    <button class="copy-btn" data-color="hsl(137, 56%, 24%)">
+                                        <i class="fas fa-copy"></i>
+                                    </button>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
                 
                 <div class="code-example">
                     <h4>CSS Implementation</h4>
-                    <div class="code-card">
-                        <pre><code>/* Hero Green Gradient */
+                    <div class="code-card carbon-style">
+                        <div class="code-header">
+                            <span class="code-filename">style.css</span>
+                            <button class="copy-btn" data-code=".gradient-hero-green {
+  background: linear-gradient(135deg, #052e16 0%, #10b981 100%);
+}
+
+.text-hero-green {
+  color: #10b981;
+}
+
+.bg-hero-green {
+  background-color: #10b981;
+}">
+                                <i class="fas fa-copy"></i> Copy CSS
+                            </button>
+                        </div>
+                        <div class="code-content">
+                            <pre><code>/* Hero Green Gradient */
 .gradient-hero-green {
   background: linear-gradient(135deg, #052e16 0%, #10b981 100%);
 }
@@ -338,19 +477,7 @@
 .bg-hero-green {
   background-color: #10b981;
 }</code></pre>
-                        <button class="copy-btn" data-code=".gradient-hero-green {
-  background: linear-gradient(135deg, #052e16 0%, #10b981 100%);
-}
-
-.text-hero-green {
-  color: #10b981;
-}
-
-.bg-hero-green {
-  background-color: #10b981;
-}">
-                            <i class="fas fa-copy"></i> Copy CSS
-                        </button>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -363,10 +490,29 @@
                         <div class="color-preview" style="background: #4c0519;"></div>
                         <div class="color-info">
                             <p class="color-name">Dark Purple</p>
-                            <p class="color-code">HEX: #4c0519</p>
-                            <button class="copy-btn" data-color="#4c0519">
-                                <i class="fas fa-copy"></i> Copy
-                            </button>
+                            <div class="color-codes">
+                                <div class="code-item">
+                                    <span class="code-label">HEX:</span>
+                                    <span class="code-value">#4c0519</span>
+                                    <button class="copy-btn" data-color="#4c0519">
+                                        <i class="fas fa-copy"></i>
+                                    </button>
+                                </div>
+                                <div class="code-item">
+                                    <span class="code-label">RGB:</span>
+                                    <span class="code-value">rgb(76, 5, 25)</span>
+                                    <button class="copy-btn" data-color="rgb(76, 5, 25)">
+                                        <i class="fas fa-copy"></i>
+                                    </button>
+                                </div>
+                                <div class="code-item">
+                                    <span class="code-label">HSL:</span>
+                                    <span class="code-value">hsl(342, 88%, 16%)</span>
+                                    <button class="copy-btn" data-color="hsl(342, 88%, 16%)">
+                                        <i class="fas fa-copy"></i>
+                                    </button>
+                                </div>
+                            </div>
                         </div>
                     </div>
                     
@@ -374,10 +520,29 @@
                         <div class="color-preview" style="background: #052e16;"></div>
                         <div class="color-info">
                             <p class="color-name">Dark Green</p>
-                            <p class="color-code">HEX: #052e16</p>
-                            <button class="copy-btn" data-color="#052e16">
-                                <i class="fas fa-copy"></i> Copy
-                            </button>
+                            <div class="color-codes">
+                                <div class="code-item">
+                                    <span class="code-label">HEX:</span>
+                                    <span class="code-value">#052e16</span>
+                                    <button class="copy-btn" data-color="#052e16">
+                                        <i class="fas fa-copy"></i>
+                                    </button>
+                                </div>
+                                <div class="code-item">
+                                    <span class="code-label">RGB:</span>
+                                    <span class="code-value">rgb(5, 46, 22)</span>
+                                    <button class="copy-btn" data-color="rgb(5, 46, 22)">
+                                        <i class="fas fa-copy"></i>
+                                    </button>
+                                </div>
+                                <div class="code-item">
+                                    <span class="code-label">HSL:</span>
+                                    <span class="code-value">hsl(144, 80%, 10%)</span>
+                                    <button class="copy-btn" data-color="hsl(144, 80%, 10%)">
+                                        <i class="fas fa-copy"></i>
+                                    </button>
+                                </div>
+                            </div>
                         </div>
                     </div>
                     
@@ -385,10 +550,29 @@
                         <div class="color-preview" style="background: #ec4899;"></div>
                         <div class="color-info">
                             <p class="color-name">Brave Pink</p>
-                            <p class="color-code">HEX: #ec4899</p>
-                            <button class="copy-btn" data-color="#ec4899">
-                                <i class="fas fa-copy"></i> Copy
-                            </button>
+                            <div class="color-codes">
+                                <div class="code-item">
+                                    <span class="code-label">HEX:</span>
+                                    <span class="code-value">#ec4899</span>
+                                    <button class="copy-btn" data-color="#ec4899">
+                                        <i class="fas fa-copy"></i>
+                                    </button>
+                                </div>
+                                <div class="code-item">
+                                    <span class="code-label">RGB:</span>
+                                    <span class="code-value">rgb(236, 72, 153)</span>
+                                    <button class="copy-btn" data-color="rgb(236, 72, 153)">
+                                        <i class="fas fa-copy"></i>
+                                    </button>
+                                </div>
+                                <div class="code-item">
+                                    <span class="code-label">HSL:</span>
+                                    <span class="code-value">hsl(330, 81%, 60%)</span>
+                                    <button class="copy-btn" data-color="hsl(330, 81%, 60%)">
+                                        <i class="fas fa-copy"></i>
+                                    </button>
+                                </div>
+                            </div>
                         </div>
                     </div>
                     
@@ -396,18 +580,53 @@
                         <div class="color-preview" style="background: #10b981;"></div>
                         <div class="color-info">
                             <p class="color-name">Hero Green</p>
-                            <p class="color-code">HEX: #10b981</p>
-                            <button class="copy-btn" data-color="#10b981">
-                                <i class="fas fa-copy"></i> Copy
-                            </button>
+                            <div class="color-codes">
+                                <div class="code-item">
+                                    <span class="code-label">HEX:</span>
+                                    <span class="code-value">#10b981</span>
+                                    <button class="copy-btn" data-color="#10b981">
+                                        <i class="fas fa-copy"></i>
+                                    </button>
+                                </div>
+                                <div class="code-item">
+                                    <span class="code-label">RGB:</span>
+                                    <span class="code-value">rgb(16, 185, 129)</span>
+                                    <button class="copy-btn" data-color="rgb(16, 185, 129)">
+                                        <i class="fas fa-copy"></i>
+                                    </button>
+                                </div>
+                                <div class="code-item">
+                                    <span class="code-label">HSL:</span>
+                                    <span class="code-value">hsl(160, 84%, 39%)</span>
+                                    <button class="copy-btn" data-color="hsl(160, 84%, 39%)">
+                                        <i class="fas fa-copy"></i>
+                                    </button>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
                 
                 <div class="code-example">
                     <h4>CSS Implementation</h4>
-                    <div class="code-card">
-                        <pre><code>/* Combined Gradient */
+                    <div class="code-card carbon-style">
+                        <div class="code-header">
+                            <span class="code-filename">style.css</span>
+                            <button class="copy-btn" data-code=".gradient-combined {
+  background: linear-gradient(135deg, #4c0519 0%, #052e16 50%, #ec4899 100%);
+}
+
+.text-combined {
+  background: linear-gradient(135deg, #ec4899 0%, #10b981 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}">
+                                <i class="fas fa-copy"></i> Copy CSS
+                            </button>
+                        </div>
+                        <div class="code-content">
+                            <pre><code>/* Combined Gradient */
 .gradient-combined {
   background: linear-gradient(135deg, #4c0519 0%, #052e16 50%, #ec4899 100%);
 }
@@ -419,18 +638,7 @@
   -webkit-text-fill-color: transparent;
   background-clip: text;
 }</code></pre>
-                        <button class="copy-btn" data-code=".gradient-combined {
-  background: linear-gradient(135deg, #4c0519 0%, #052e16 50%, #ec4899 100%);
-}
-
-.text-combined {
-  background: linear-gradient(135deg, #ec4899 0%, #10b981 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-}">
-                            <i class="fas fa-copy"></i> Copy CSS
-                        </button>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -438,10 +646,11 @@
 
         <section class="faq-section" id="faqSection">
             <div class="section-header">
-                <h2><i class="fas fa-question-circle"></i> Frequently Asked Questions</h2>
                 <button class="back-btn" data-section="upload">
-                    <i class="fas fa-arrow-left"></i> Back
+                    <i class="fas fa-arrow-left"></i>
                 </button>
+                <h2 class="section-title"><i class="fas fa-question-circle"></i> Frequently Asked Questions</h2>
+                <div class="header-spacer"></div>
             </div>
             
             <div class="faq-list">
@@ -499,15 +708,16 @@
 
         <section class="privacy-section" id="privacySection">
             <div class="section-header">
-                <h2><i class="fas fa-shield-alt"></i> Privacy & Terms</h2>
                 <button class="back-btn" data-section="upload">
-                    <i class="fas fa-arrow-left"></i> Back
+                    <i class="fas fa-arrow-left"></i>
                 </button>
+                <h2 class="section-title"><i class="fas fa-shield-alt"></i> Privacy & Terms</h2>
+                <div class="header-spacer"></div>
             </div>
             
             <div class="privacy-content">
                 <h3>Privacy Policy</h3>
-                <p>Last updated: January 2025</p>
+                <p>Last updated: September 19, 2025</p>
                 
                 <p>Your privacy is important to us. This privacy policy explains what personal data we collect and how we use it.</p>
                 
@@ -537,10 +747,11 @@
 
         <section class="feedback-section" id="feedbackSection">
             <div class="section-header">
-                <h2><i class="fas fa-comment-dots"></i> Feedback</h2>
                 <button class="back-btn" data-section="upload">
-                    <i class="fas fa-arrow-left"></i> Back
+                    <i class="fas fa-arrow-left"></i>
                 </button>
+                <h2 class="section-title"><i class="fas fa-comment-dots"></i> Feedback</h2>
+                <div class="header-spacer"></div>
             </div>
             
             <div class="feedback-form">
@@ -571,6 +782,7 @@
                     <i class="fas fa-check-circle"></i>
                     <h3>Thank you for your feedback!</h3>
                     <p>We appreciate you taking the time to help us improve Duotone Photo Editor.</p>
+                    <p class="feedback-note">Note: This is a demo. In a real application, your feedback would be sent to our server.</p>
                 </div>
             </div>
         </section>
@@ -581,20 +793,22 @@
             <div class="footer-controls">
                 <div class="theme-toggle-container">
                     <i class="fas fa-sun"></i>
+                    <span class="toggle-label">Light</span>
                     <label class="theme-switch">
                         <input type="checkbox" id="themeToggle">
                         <span class="slider round"></span>
                     </label>
+                    <span class="toggle-label">Dark</span>
                     <i class="fas fa-moon"></i>
                 </div>
                 
                 <div class="language-toggle-container">
-                    <span class="language-option active" data-lang="en">EN 🇺🇸</span>
+                    <span class="toggle-label">English</span>
                     <label class="language-switch">
                         <input type="checkbox" id="languageToggle">
                         <span class="slider round"></span>
                     </label>
-                    <span class="language-option" data-lang="id">ID 🇮🇩</span>
+                    <span class="toggle-label">Indonesia</span>
                 </div>
             </div>
             
@@ -616,9 +830,15 @@
                 </div>
             </div>
             <div class="footer-bottom">
-                <p>&copy; 2025 Duotone Photo Editor. Created with <i class="fas fa-heart"></i> by <a href="https://wa.me/6283872050439" target="_blank" class="developer-link">
-                    <img src="images/jaxzynnice.png" alt="Jaxzynnice" class="developer-logo"> Jaxzynnice
-                </a></p>
+                <p>&copy; 2025 Duotone Photo Editor. Created with <i class="fas fa-heart"></i> by</p>
+                <div class="developer-logos">
+                    <a href="https://wa.me/6283872050439" target="_blank" class="developer-link">
+                        <img src="images/jaxzynnice.png" alt="Jaxzynnice" class="developer-logo">
+                    </a>
+                    <a href="https://deepseek.com" target="_blank" class="developer-link">
+                        <img src="images/deepseek.png" alt="DeepSeek" class="developer-logo">
+                    </a>
+                </div>
             </div>
         </div>
     </footer>
