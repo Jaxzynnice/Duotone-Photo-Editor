@@ -9,13 +9,13 @@ class DuotoneEditor {
         this.selectedEffect = 'bravePink';
         this.classicEnabled = false;
         this.reverseEnabled = false;
-        this.maxFileSize = 5 * 1024 * 1024; // 5MB
         this.swipeStartX = 0;
         this.swipeThreshold = 50;
         this.currentIntensity = 50;
         this.isProcessing = false;
         this.language = 'en';
         this.activeColorCard = null;
+        this.maxHistorySteps = 3;
 
         this.initializeEventListeners();
         this.setInitialEffect();
@@ -26,6 +26,7 @@ class DuotoneEditor {
         // Upload area events
         const uploadArea = document.getElementById('uploadArea');
         const fileInput = document.getElementById('fileInput');
+        const changePhotoBtn = document.getElementById('changePhotoBtn');
         
         uploadArea.addEventListener('click', () => fileInput.click());
         uploadArea.addEventListener('dragover', (e) => {
@@ -47,6 +48,10 @@ class DuotoneEditor {
             if (e.target.files.length) {
                 this.handleFileUpload(e.target.files[0]);
             }
+        });
+        
+        changePhotoBtn.addEventListener('click', () => {
+            fileInput.click();
         });
         
         // Effect dots selection
@@ -98,7 +103,6 @@ class DuotoneEditor {
         document.getElementById('redoBtn').addEventListener('click', () => this.redo());
         document.getElementById('downloadBtn').addEventListener('click', () => this.downloadImage());
         document.getElementById('shareBtn').addEventListener('click', () => this.shareImage());
-        document.getElementById('resetBtn').addEventListener('click', () => this.resetUpload());
         
         // Swipe events
         const imagePreview = document.getElementById('imagePreview');
@@ -233,13 +237,13 @@ class DuotoneEditor {
         let effectName = '';
         switch(effect) {
             case 'bravePink':
-                effectName = 'Brave Pink';
+                effectName = this.language === 'id' ? 'Brave Pink' : 'Brave Pink';
                 break;
             case 'heroGreen':
-                effectName = 'Hero Green';
+                effectName = this.language === 'id' ? 'Hero Green' : 'Hero Green';
                 break;
             case 'combined':
-                effectName = 'Combined Effect';
+                effectName = this.language === 'id' ? 'Efek Gabungan' : 'Combined Effect';
                 break;
         }
         document.getElementById('effectName').textContent = effectName;
@@ -304,14 +308,80 @@ class DuotoneEditor {
     
     updateLanguage() {
         // Update UI texts based on language
-        const elements = document.querySelectorAll('[data-en], [data-id]');
-        
-        elements.forEach(element => {
-            const text = this.language === 'en' ? element.dataset.en : element.dataset.id;
-            if (text) {
-                element.textContent = text;
+        const translations = {
+            'en': {
+                'uploadTitle': 'Upload Your Photo',
+                'uploadDesc': 'Drag & drop your image here or click to browse',
+                'formats': 'Supported formats: JPG, JPEG, PNG, WebP, ICO, HEIC, GIF, BMP, TIFF',
+                'maxSize': 'No file size limit - all processing happens in your browser',
+                'colorCodes': 'Color Codes',
+                'faq': 'FAQ',
+                'privacy': 'Privacy',
+                'editorTitle': 'Photo Editor',
+                'changePhoto': 'Change',
+                'preview': 'Preview',
+                'undo': 'Undo',
+                'redo': 'Redo',
+                'intensity': 'Effect Intensity:',
+                'classic': 'Classic Colors',
+                'reverse': 'Reverse Duotone',
+                'export': 'Export As:',
+                'download': 'Download',
+                'share': 'Share',
+                'bravePink': 'Brave Pink',
+                'heroGreen': 'Hero Green',
+                'combined': 'Combined Effect'
+            },
+            'id': {
+                'uploadTitle': 'Unggah Foto Anda',
+                'uploadDesc': 'Seret & lepas gambar Anda di sini atau klik untuk menjelajah',
+                'formats': 'Format yang didukung: JPG, JPEG, PNG, WebP, ICO, HEIC, GIF, BMP, TIFF',
+                'maxSize': 'Tidak ada batas ukuran file - semua pemrosesan terjadi di browser Anda',
+                'colorCodes': 'Kode Warna',
+                'faq': 'FAQ',
+                'privacy': 'Privasi',
+                'editorTitle': 'Editor Foto',
+                'changePhoto': 'Ubah',
+                'preview': 'Pratinjau',
+                'undo': 'Undo',
+                'redo': 'Redo',
+                'intensity': 'Intensitas Efek:',
+                'classic': 'Warna Klasik',
+                'reverse': 'Duotone Terbalik',
+                'export': 'Ekspor Sebagai:',
+                'download': 'Unduh',
+                'share': 'Bagikan',
+                'bravePink': 'Brave Pink',
+                'heroGreen': 'Hero Green',
+                'combined': 'Efek Gabungan'
             }
-        });
+        };
+        
+        const currentLang = translations[this.language];
+        
+        // Update upload section
+        document.querySelector('.upload-placeholder h2').textContent = currentLang.uploadTitle;
+        document.querySelector('.upload-placeholder p').textContent = currentLang.uploadDesc;
+        document.querySelector('.formats').textContent = currentLang.formats;
+        document.querySelector('.max-size').textContent = currentLang.maxSize;
+        
+        // Update section buttons
+        document.querySelector('[data-section="colorCodes"]').innerHTML = `<i class="fas fa-palette"></i> ${currentLang.colorCodes}`;
+        document.querySelector('[data-section="faq"]').innerHTML = `<i class="fas fa-question-circle"></i> ${currentLang.faq}`;
+        document.querySelector('[data-section="privacy"]').innerHTML = `<i class="fas fa-shield-alt"></i> ${currentLang.privacy}`;
+        
+        // Update editor section
+        document.querySelector('.section-title').textContent = currentLang.editorTitle;
+        document.getElementById('changePhotoBtn').innerHTML = `<i class="fas fa-sync-alt"></i> ${currentLang.changePhoto}`;
+        document.querySelector('.preview-header h3').textContent = currentLang.preview;
+        document.getElementById('undoBtn').innerHTML = `<i class="fas fa-undo"></i> ${currentLang.undo}`;
+        document.getElementById('redoBtn').innerHTML = `<i class="fas fa-redo"></i> ${currentLang.redo}`;
+        document.querySelector('.intensity-control label').innerHTML = `${currentLang.intensity} <output id="intensityValue">${this.currentIntensity}%</output>`;
+        document.getElementById('classicToggle').innerHTML = `<span>${currentLang.classic}</span><div class="toggle-switch"></div>`;
+        document.getElementById('reverseToggle').innerHTML = `<span>${currentLang.reverse}</span><div class="toggle-switch"></div>`;
+        document.querySelector('.export-options label').textContent = currentLang.export;
+        document.getElementById('downloadBtn').innerHTML = `<i class="fas fa-download"></i> ${currentLang.download}`;
+        document.getElementById('shareBtn').innerHTML = `<i class="fas fa-share-alt"></i> ${currentLang.share}`;
         
         // Update effect names
         this.selectEffect(this.selectedEffect);
@@ -464,21 +534,15 @@ class DuotoneEditor {
     
     handleFileUpload(file) {
         // Check if file is an image
-        if (!file.type.match('image.*')) {
-            alert(this.language === 'id' ? 'Silakan unggah file gambar (JPEG, PNG, atau WebP)' : 'Please upload an image file (JPEG, PNG, or WebP)');
-            return;
-        }
+        const imageTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/webp', 'image/x-icon', 'image/heic', 'image/gif', 'image/bmp', 'image/tiff'];
         
-        // Check file size
-        if (file.size > this.maxFileSize) {
-            alert(this.language === 'id' ? 
-                `Ukuran file melebihi batas maksimum 5MB. File Anda: ${this.formatFileSize(file.size)}` : 
-                `File size exceeds the maximum limit of 5MB. Your file: ${this.formatFileSize(file.size)}`);
+        if (!imageTypes.includes(file.type)) {
+            alert(this.language === 'id' ? 'Silakan unggah file gambar yang didukung' : 'Please upload a supported image file');
             return;
         }
         
         // Show loading spinner
-        document.getElementById('loadingSpinner').classList.remove('hidden');
+        this.showLoading();
         
         const reader = new FileReader();
         reader.onload = (e) => {
@@ -487,16 +551,24 @@ class DuotoneEditor {
                 this.originalImage = img;
                 this.updateFileInfo(file, img);
                 this.resetEditor();
-                document.getElementById('loadingSpinner').classList.add('hidden');
+                this.hideLoading();
                 this.showSection('editor');
             };
             img.onerror = () => {
-                document.getElementById('loadingSpinner').classList.add('hidden');
+                this.hideLoading();
                 alert(this.language === 'id' ? 'Gagal memuat gambar' : 'Failed to load image');
             };
             img.src = e.target.result;
         };
         reader.readAsDataURL(file);
+    }
+    
+    showLoading() {
+        document.getElementById('loadingSpinner').classList.remove('hidden');
+    }
+    
+    hideLoading() {
+        document.getElementById('loadingSpinner').classList.add('hidden');
     }
     
     updateFileInfo(file, img) {
@@ -508,7 +580,8 @@ class DuotoneEditor {
     formatFileSize(bytes) {
         if (bytes < 1024) return bytes + ' bytes';
         else if (bytes < 1048576) return (bytes / 1024).toFixed(1) + ' KB';
-        else return (bytes / 1048576).toFixed(1) + ' MB';
+        else if (bytes < 1073741824) return (bytes / 1048576).toFixed(1) + ' MB';
+        else return (bytes / 1073741824).toFixed(1) + ' GB';
     }
     
     calculateAspectRatio(width, height) {
@@ -516,15 +589,6 @@ class DuotoneEditor {
         const gcd = (a, b) => b === 0 ? a : gcd(b, a % b);
         const divisor = gcd(width, height);
         return `${width/divisor}:${height/divisor}`;
-    }
-    
-    resetUpload() {
-        this.showSection('upload');
-        this.originalImage = null;
-        this.currentImage = null;
-        this.history = [];
-        this.historyIndex = -1;
-        document.getElementById('fileInput').value = '';
     }
     
     resetEditor() {
@@ -539,8 +603,8 @@ class DuotoneEditor {
         
         this.isProcessing = true;
         
-        // Show loading spinner
-        document.getElementById('loadingSpinner').classList.remove('hidden');
+        // Show loading spinner briefly
+        this.showLoading();
         
         // Use requestAnimationFrame for smoother performance
         requestAnimationFrame(() => {
@@ -623,7 +687,11 @@ class DuotoneEditor {
                 console.error('Error applying effect:', error);
             } finally {
                 this.isProcessing = false;
-                document.getElementById('loadingSpinner').classList.add('hidden');
+                
+                // Hide loading after a brief moment (sabotase effect)
+                setTimeout(() => {
+                    this.hideLoading();
+                }, 300);
             }
         });
     }
@@ -632,6 +700,12 @@ class DuotoneEditor {
         // If we're in the middle of history, remove future states
         if (this.historyIndex < this.history.length - 1) {
             this.history = this.history.slice(0, this.historyIndex + 1);
+        }
+        
+        // Limit history to max steps
+        if (this.history.length >= this.maxHistorySteps) {
+            this.history.shift();
+            this.historyIndex = Math.max(0, this.historyIndex - 1);
         }
         
         // Save current state with all settings
@@ -698,13 +772,13 @@ class DuotoneEditor {
         let effectName = '';
         switch(this.selectedEffect) {
             case 'bravePink':
-                effectName = 'Brave Pink';
+                effectName = this.language === 'id' ? 'Brave Pink' : 'Brave Pink';
                 break;
             case 'heroGreen':
-                effectName = 'Hero Green';
+                effectName = this.language === 'id' ? 'Hero Green' : 'Hero Green';
                 break;
             case 'combined':
-                effectName = 'Combined Effect';
+                effectName = this.language === 'id' ? 'Efek Gabungan' : 'Combined Effect';
                 break;
         }
         document.getElementById('effectName').textContent = effectName;
@@ -713,17 +787,63 @@ class DuotoneEditor {
     }
     
     updateHistoryButtons() {
-        document.getElementById('undoBtn').disabled = this.historyIndex <= 0;
-        document.getElementById('redoBtn').disabled = this.historyIndex >= this.history.length - 1;
+        const undoBtn = document.getElementById('undoBtn');
+        const redoBtn = document.getElementById('redoBtn');
+        
+        undoBtn.disabled = this.historyIndex <= 0;
+        redoBtn.disabled = this.historyIndex >= this.history.length - 1;
+        
+        // Apply muted styles for disabled buttons
+        if (undoBtn.disabled) {
+            undoBtn.classList.add('disabled');
+        } else {
+            undoBtn.classList.remove('disabled');
+        }
+        
+        if (redoBtn.disabled) {
+            redoBtn.classList.add('disabled');
+        } else {
+            redoBtn.classList.remove('disabled');
+        }
     }
     
     downloadImage() {
         if (!this.currentImage) return;
         
-        const link = document.createElement('a');
-        link.download = `duotone-${this.selectedEffect}-${Date.now()}.png`;
-        link.href = this.currentImage;
-        link.click();
+        const format = document.getElementById('exportFormat').value;
+        const quality = 0.92; // High quality
+        
+        // Convert to desired format
+        let mimeType;
+        switch(format) {
+            case 'png': mimeType = 'image/png'; break;
+            case 'jpeg': mimeType = 'image/jpeg'; break;
+            case 'jpg': mimeType = 'image/jpeg'; break;
+            case 'webp': mimeType = 'image/webp'; break;
+            case 'ico': mimeType = 'image/x-icon'; break;
+            case 'bmp': mimeType = 'image/bmp'; break;
+            case 'gif': mimeType = 'image/gif'; break;
+            case 'tiff': mimeType = 'image/tiff'; break;
+            default: mimeType = 'image/png';
+        }
+        
+        // Convert data URL to blob with desired format
+        const img = new Image();
+        img.onload = () => {
+            const tempCanvas = document.createElement('canvas');
+            tempCanvas.width = img.width;
+            tempCanvas.height = img.height;
+            const tempCtx = tempCanvas.getContext('2d');
+            tempCtx.drawImage(img, 0, 0);
+            
+            const dataUrl = tempCanvas.toDataURL(mimeType, quality);
+            
+            const link = document.createElement('a');
+            link.download = `duotone-${this.selectedEffect}-${Date.now()}.${format}`;
+            link.href = dataUrl;
+            link.click();
+        };
+        img.src = this.currentImage;
     }
     
     shareImage() {
@@ -783,9 +903,21 @@ class DuotoneEditor {
     handleFeedbackSubmit() {
         const form = document.getElementById('feedbackForm');
         const success = document.getElementById('feedbackSuccess');
+        const name = document.getElementById('feedbackName').value;
+        const email = document.getElementById('feedbackEmail').value;
+        const message = document.getElementById('feedbackMessage').value;
         
         // In a real application, you would send this data to a server
-        // For now, we'll just show a success message
+        // For demo purposes, we'll just show a success message
+        console.log('Feedback submitted:', { name, email, message });
+        
+        // Send feedback to WhatsApp (this would need a server in production)
+        const whatsappMessage = encodeURIComponent(
+            `New Feedback from Duotone Photo Editor:\n\nName: ${name || 'Not provided'}\nEmail: ${email || 'Not provided'}\nMessage: ${message}`
+        );
+        
+        // Open WhatsApp with pre-filled message (user would need to manually send)
+        window.open(`https://wa.me/6283872050439?text=${whatsappMessage}`, '_blank');
         
         form.classList.add('hidden');
         success.classList.remove('hidden');
